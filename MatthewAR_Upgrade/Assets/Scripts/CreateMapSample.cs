@@ -1,0 +1,521 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using System;
+using UnityEngine.UI;
+using UnityEngine.XR.iOS;
+using System.Runtime.InteropServices;
+using System.IO;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+using TMPro;
+
+[RequireComponent(typeof(InputManager))]
+public class CreateMapSample : MonoBehaviour, PlacenoteListener
+{
+	[SerializeField] GameObject mMapSelectedPanel;
+	[SerializeField] GameObject mInitButtonPanel;
+	[SerializeField] GameObject mMappingButtonPanel;
+	[SerializeField] GameObject mSimulatorAddShapeButton;
+	[SerializeField] GameObject mMapListPanel;
+	[SerializeField] GameObject mExitButton;
+	[SerializeField] GameObject mListElement;
+	[SerializeField] RectTransform mListContentParent;
+	[SerializeField] ToggleGroup mToggleGroup;
+	[SerializeField] Slider mRadiusSlider;
+	[SerializeField] float mMaxRadiusSearch;
+	[SerializeField] Text mRadiusLabel;
+	[SerializeField] GameObject MapnameInputPopUp;
+	[SerializeField] TMP_Dropdown DropdownList;
+	[SerializeField] TextMeshProUGUI statusText;
+
+	private InputManager inputManager;
+	public NavController navController;
+	private UnityARSessionNativeInterface mSession;
+	private LibPlacenote.MapInfo mSelectedMapInfo;
+	private AddShapeWaypoint shapeManager;
+	public Node destination;
+	[SerializeField]List<DestinationTarget> destinationList = new List<DestinationTarget>();
+	private string mSelectedMapId
+	{
+		get
+		{
+			return mSelectedMapInfo != null ? mSelectedMapInfo.placeId : null;
+		}
+	}
+	private string mSaveMapId = null;
+	private bool mReportDebug = false;
+	private bool mARInit = false;
+	public bool haveMapName = false;
+	private string mapname;
+	
+
+	private LibPlacenote.MapMetadataSettable mCurrMapDetails;
+
+	void Start()
+    {
+		haveMapName = false;
+		mSession = UnityARSessionNativeInterface.GetARSessionNativeInterface();
+		StartARKit();
+		FeaturesVisualizer.EnablePointcloud(); // Optional - to see the debug features
+		LibPlacenote.Instance.RegisterListener(this);
+		shapeManager = GetComponent<AddShapeWaypoint>();
+		inputManager = GetComponent<InputManager>();
+	}
+
+	private void StartARKit()
+	{
+		Application.targetFrameRate = 60;
+		ARKitWorldTrackingSessionConfiguration config = new ARKitWorldTrackingSessionConfiguration();
+		config.planeDetection = UnityARPlaneDetection.Horizontal;
+		config.alignment = UnityARAlignment.UnityARAlignmentGravity;
+		config.getPointCloudData = true;
+		config.enableLightEstimation = true;
+		mSession.RunWithConfig(config);
+	}
+
+	void Update()
+	{
+		if (!mARInit && LibPlacenote.Instance.Initialized())
+		{
+			mARInit = true;
+			statusText.text = "Ready to Start!";
+		}
+	}
+
+	public void OnListMapClick()
+	{
+		if (!LibPlacenote.Instance.Initialized())
+		{
+			Debug.Log("SDK not yet initialized");
+			return;
+		}
+
+		foreach (Transform t in mListContentParent.transform)
+		{
+			Destroy(t.gameObject);
+		}
+
+
+		mMapListPanel.SetActive(true);
+		mInitButtonPanel.SetActive(false);
+		mRadiusSlider.gameObject.SetActive(true);
+		LibPlacenote.Instance.ListMaps((mapList) => {
+			// render the map list!
+			foreach (LibPlacenote.MapInfo mapInfoItem in mapList)
+			{
+				if (mapInfoItem.metadata.userdata != null)
+				{
+					Debug.Log(mapInfoItem.metadata.userdata.ToString(Formatting.None));
+				}
+				AddMapToList(mapInfoItem);
+			}
+		});
+	}
+
+	public void OnRadiusSelect()
+	{
+		Debug.Log("Map search:" + mRadiusSlider.value.ToString("F2"));
+		statusText.text = "Filtering maps by GPS location";
+
+		LocationInfo locationInfo = Input.location.lastData;
+
+
+		float radiusSearch = mRadiusSlider.value * mMaxRadiusSearch;
+		mRadiusLabel.text = "Distance Filter: " + (radiusSearch / 1000.0).ToString("F2") + " km";
+
+		LibPlacenote.Instance.SearchMaps(locationInfo.latitude, locationInfo.longitude, radiusSearch,
+			(mapList) => {
+				foreach (Transform t in mListContentParent.transform)
+				{
+					Destroy(t.gameObject);
+				}
+				// render the map list!
+				foreach (LibPlacenote.MapInfo mapId in mapList)
+				{
+					if (mapId.metadata.userdata != null)
+					{
+						Debug.Log(mapId.metadata.userdata.ToString(Formatting.None));
+					}
+					AddMapToList(mapId);
+				}
+
+				statusText.text = "Map List Complete";
+			});
+	}
+
+	void AddMapToList(LibPlacenote.MapInfo mapInfo)
+	{
+		GameObject newElement = Instantiate(mListElement) as GameObject;
+		MapInfoElement listElement = newElement.GetComponent<MapInfoElement>();
+		listElement.Initialize(mapInfo, mToggleGroup, mListContentParent, (value) => {
+			OnMapSelected(mapInfo);
+		});
+	}
+
+	void OnMapSelected(LibPlacenote.MapInfo mapInfo)
+	{
+		mSelectedMapInfo = mapInfo;
+		mMapSelectedPanel.SetActive(true);
+		mRadiusSlider.gameObject.SetActive(false);
+	}
+
+	public void ResetSlider()
+	{
+		mRadiusSlider.value = 1.0f;
+		mRadiusLabel.text = "Distance Filter: Off";
+	}
+
+	public void OnCancelClick()
+	{
+		mMapSelectedPanel.SetActive(false);
+		mMapListPanel.SetActive(false);
+		mInitButtonPanel.SetActive(true);
+		ResetSlider();
+	}
+
+	public void OnDeleteMapClicked()
+	{
+		if (!LibPlacenote.Instance.Initialized())
+		{
+			Debug.Log("SDK not yet initialized");
+			return;
+		}
+
+		statusText.text = "Deleting Map ID: " + mSelectedMapId;
+		LibPlacenote.Instance.DeleteMap(mSelectedMapId, (deleted, errMsg) => {
+			if (deleted)
+			{
+				mMapSelectedPanel.SetActive(false);
+				statusText.text = "Deleted ID: " + mSelectedMapId;
+				OnListMapClick();
+			}
+			else
+			{
+				statusText.text = "Failed to delete ID: " + mSelectedMapId;
+			}
+		});
+	}
+
+
+	public void OnNewMapClicked()
+	{
+		ConfigureSession();
+
+		if (!LibPlacenote.Instance.Initialized())
+		{
+			Debug.Log("SDK not yet initialized");
+			return;
+		}
+		mInitButtonPanel.SetActive(false);
+		mMappingButtonPanel.SetActive(true);
+
+		LibPlacenote.Instance.StartSession();
+		if (mReportDebug)
+		{
+			LibPlacenote.Instance.StartRecordDataset(
+				(completed, faulted, percentage) => {
+					if (completed)
+					{
+						statusText.text = "Dataset Upload Complete";
+					}
+					else if (faulted)
+					{
+						statusText.text = "Dataset Upload Faulted";
+					}
+					else
+					{
+						statusText.text = "Dataset Upload: (" + percentage.ToString("F2") + "/1.0)";
+					}
+				});
+			Debug.Log("Started Debug Report");
+		}
+	}
+
+	IEnumerator SaveMap()
+	{
+		bool useLocation = Input.location.status == LocationServiceStatus.Running;
+		LocationInfo locationInfo = Input.location.lastData;
+		MapnameInputPopUp.SetActive(true);
+		statusText.text = "Wait for name input....";
+
+		yield return new WaitUntil(() => haveMapName == true);
+		statusText.text = "Saving...";
+		LibPlacenote.Instance.SaveMap(
+			(mapId) => {
+
+				LibPlacenote.Instance.StopSession();
+				FeaturesVisualizer.clearPointcloud();
+
+				mSaveMapId = mapId;
+				mInitButtonPanel.SetActive(true);
+				mMappingButtonPanel.SetActive(false);
+				mExitButton.SetActive(false);
+
+				LibPlacenote.MapMetadataSettable metadata = new LibPlacenote.MapMetadataSettable();
+
+				metadata.name = inputManager.MapName; // set name here
+
+				statusText.text = "Saved Map Name: " + metadata.name;
+
+				JObject userdata = new JObject();
+				metadata.userdata = userdata;
+
+				JObject shapeList = shapeManager.Shapes2JSON();
+
+				userdata["shapeList"] = shapeList;
+				shapeManager.ClearShapes();
+
+				if (useLocation)
+				{
+					metadata.location = new LibPlacenote.MapLocation();
+					metadata.location.latitude = locationInfo.latitude;
+					metadata.location.longitude = locationInfo.longitude;
+					metadata.location.altitude = locationInfo.altitude;
+				}
+				LibPlacenote.Instance.SetMetadata(mapId, metadata, (success) => {
+					if (success)
+					{
+						Debug.Log("Meta data successfully saved");
+					}
+					else
+					{
+						Debug.Log("Meta data failed to save");
+					}
+				});
+				mCurrMapDetails = metadata;
+			},
+			(completed, faulted, percentage) => {
+				if (completed)
+				{
+					statusText.text = "Upload Complete:" + mCurrMapDetails.name;
+				}
+				else if (faulted)
+				{
+					statusText.text = "Upload of Map Named: " + mCurrMapDetails.name + "faulted";
+				}
+				else
+				{
+					statusText.text = "Uploading Map Named: " + mCurrMapDetails.name + "(" + percentage.ToString("F2") + "/1.0)";
+				}
+			}
+		);
+
+	}
+
+	public void OnSaveMapClicked()
+	{
+		if (!LibPlacenote.Instance.Initialized())
+		{
+			Debug.Log("SDK not yet initialized");
+			return;
+		}
+		StartCoroutine(SaveMap());
+	}
+
+	IEnumerator PrepareNode()
+	{
+		shapeManager.CreateNode();
+		yield return new WaitUntil(() => shapeManager.nodeLoaded == true);
+		if(destination != null)
+		{
+
+			navController.InitializeNavigation();
+		}
+		shapeManager.nodeLoaded = false;
+	}
+	public void OnFindPathClicked()
+	{
+		if(navController != null)
+		{
+
+			navController.ReSetParameter();
+			StartCoroutine(PrepareNode());
+		}
+	}
+
+	public void OnDropDownSelected()
+	{
+		if(destinationList.Count ==0)
+		{
+			Debug.Log("No Destination in list");
+			return;
+		}
+				
+		int index = DropdownList.value;
+		foreach(DestinationTarget des in destinationList)
+		{
+			if(des.DestinationName == DropdownList.options[index].text)
+			{
+				destination = des.gameObject.GetComponent<Node>();
+			}
+		}
+		
+	}
+
+	public void OnLoadMapClicked()
+	{
+		ConfigureSession();
+
+		if (!LibPlacenote.Instance.Initialized())
+		{
+			Debug.Log("SDK not yet initialized");
+			return;
+		}
+
+		statusText.text = "Loading Map ID: " + mSelectedMapId;
+		LibPlacenote.Instance.LoadMap(mSelectedMapId,
+			(completed, faulted, percentage) => {
+				if (completed)
+				{
+					mMapSelectedPanel.SetActive(false);
+					mMapListPanel.SetActive(false);
+					mInitButtonPanel.SetActive(false);
+					mMappingButtonPanel.SetActive(true);
+					mExitButton.SetActive(true);
+					DropdownList.gameObject.SetActive(true);
+					LoadDestinationList();
+
+					LibPlacenote.Instance.StartSession(true);
+
+					if (mReportDebug)
+					{
+						LibPlacenote.Instance.StartRecordDataset(
+							(datasetCompleted, datasetFaulted, datasetPercentage) => {
+
+								if (datasetCompleted)
+								{
+									statusText.text = "Dataset Upload Complete";
+								}
+								else if (datasetFaulted)
+								{
+									statusText.text = "Dataset Upload Faulted";
+								}
+								else
+								{
+									statusText.text = "Dataset Upload: " + datasetPercentage.ToString("F2") + "/1.0";
+								}
+							});
+						Debug.Log("Started Debug Report");
+					}
+
+					statusText.text = "Loaded ID: " + mSelectedMapId;
+				}
+				else if (faulted)
+				{
+					statusText.text = "Failed to load ID: " + mSelectedMapId;
+				}
+				else
+				{
+					statusText.text = "Map Download: " + percentage.ToString("F2") + "/1.0";
+				}
+			}
+		);
+	}
+
+	public void OnExitClick()
+	{
+		mInitButtonPanel.SetActive(true);
+		mExitButton.SetActive(false);
+		mMappingButtonPanel.SetActive(false);
+		DropdownList.gameObject.SetActive(false);
+		LibPlacenote.Instance.StopSession();
+		FeaturesVisualizer.clearPointcloud();
+		destination = null;
+		destinationList.Clear();
+		DropdownList.value = 0;
+		DropdownList.options.Clear();
+		shapeManager.ClearShapes();
+		navController._initialized = false;
+		navController._initializedComplete = false;
+	}
+
+	
+
+	// Runs when a new pose is received from Placenote.    
+	public void OnPose(Matrix4x4 outputPose, Matrix4x4 arkitPose) { }
+
+	// Runs when LibPlacenote sends a status change message like Localized!
+	public void OnStatusChange(LibPlacenote.MappingStatus prevStatus, LibPlacenote.MappingStatus currStatus)
+	{
+		Debug.Log("prevStatus: " + prevStatus.ToString() + " currStatus: " + currStatus.ToString());
+		if (currStatus == LibPlacenote.MappingStatus.RUNNING && prevStatus == LibPlacenote.MappingStatus.LOST)
+		{
+			statusText.text = "Localized";
+			GetComponent<AddShapeWaypoint>().LoadShapesJSON(mSelectedMapInfo.metadata.userdata);
+			LoadDestinationList();
+		}
+		else if (currStatus == LibPlacenote.MappingStatus.RUNNING && prevStatus == LibPlacenote.MappingStatus.WAITING)
+		{
+			statusText.text = "Mapping: Tap to add Shapes";
+			mExitButton.SetActive(true);
+		}
+		else if (currStatus == LibPlacenote.MappingStatus.LOST)
+		{
+			statusText.text = "Searching for position lock";
+		}
+		else if (currStatus == LibPlacenote.MappingStatus.WAITING)
+		{
+			if (shapeManager.shapeObjList.Count != 0)
+			{
+				shapeManager.ClearShapes();
+			}
+		}
+
+	}
+
+	IEnumerator DestinationToDropDown()
+	{
+		yield return new WaitUntil(() => shapeManager.shapesLoaded == true);
+		List<string> desname = new List<string>();
+		var tempDesArray = FindObjectsOfType<DestinationTarget>();
+		if (tempDesArray == null)
+		{
+			Debug.Log("did not find diamond");
+			yield break;
+		}
+
+		if (DropdownList.options.Count == tempDesArray.Length)
+		{
+			Debug.Log("already loaded destinationlist");
+			yield break;
+		}
+
+		foreach (var des in tempDesArray)
+		{
+			desname.Add(des.DestinationName);
+			destinationList.Add(des);
+			Debug.Log(des.DestinationName);
+		}
+		foreach (var name in desname)
+		{
+			TMP_Dropdown.OptionData data = new TMP_Dropdown.OptionData();
+			data.text = name;
+			DropdownList.options.Add(data);
+		}
+		DropdownList.RefreshShownValue();
+		if(destination == null)
+		{
+			destination = destinationList[0].GetComponent<Node>();
+		}
+	}
+
+	public void LoadDestinationList()
+	{
+		StartCoroutine(DestinationToDropDown());
+	}
+
+	private void ConfigureSession()
+	{
+#if !UNITY_EDITOR
+		ARKitWorldTrackingSessionConfiguration config = new ARKitWorldTrackingSessionConfiguration ();
+		config.alignment = UnityARAlignment.UnityARAlignmentGravity;
+		config.getPointCloudData = true;
+		config.enableLightEstimation = true;
+        config.planeDetection = UnityARPlaneDetection.Horizontal;
+		mSession.RunWithConfig (config);
+#endif
+	}
+
+
+}
