@@ -49,6 +49,8 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 	public bool haveMapName = false;
 	private string mapname;
 	
+	public enum Status { Mapping,Waiting,Running,Lost };
+	public static Status mapStatus;
 
 	private LibPlacenote.MapMetadataSettable mCurrMapDetails;
 
@@ -442,20 +444,26 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 		if (currStatus == LibPlacenote.MappingStatus.RUNNING && prevStatus == LibPlacenote.MappingStatus.LOST)
 		{
 			statusText.text = "Localized";
+			mapStatus = Status.Running;
 			GetComponent<AddShapeWaypoint>().LoadShapesJSON(mSelectedMapInfo.metadata.userdata);
+			FeaturesVisualizer.DisablePointcloud(); //if player is doing navigation, disable point cloud
 			LoadDestinationList();
 		}
 		else if (currStatus == LibPlacenote.MappingStatus.RUNNING && prevStatus == LibPlacenote.MappingStatus.WAITING)
 		{
 			statusText.text = "Mapping: Tap to add Shapes";
+			mapStatus = Status.Mapping;
+			FeaturesVisualizer.EnablePointcloud(); //if mapping enable point cloud to be see
 			mExitButton.SetActive(true);
 		}
 		else if (currStatus == LibPlacenote.MappingStatus.LOST)
 		{
 			statusText.text = "Searching for position lock";
+			mapStatus = Status.Lost;
 		}
 		else if (currStatus == LibPlacenote.MappingStatus.WAITING)
 		{
+			mapStatus = Status.Waiting;
 			if (shapeManager.shapeObjList.Count != 0)
 			{
 				shapeManager.ClearShapes();

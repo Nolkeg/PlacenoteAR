@@ -8,10 +8,6 @@ public class DestinationTarget : MonoBehaviour
 	public GameObject diamond;
 	public string DestinationName;
 
-	private void Start()
-	{
-		Activate(true);
-	}
 
 	// Update is called once per frame
 	void Update()

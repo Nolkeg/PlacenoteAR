@@ -52,7 +52,7 @@ public class AddShapeWaypoint : MonoBehaviour
 		shapeInfo.name = name;
 		shapeInfoList.Add(shapeInfo);
 		Debug.Log(shapeInfo.name);
-		GameObject shape = ShapeFromInfo(shapeInfo,false); // instantiate shape from info
+		GameObject shape = ShapeFromInfo(shapeInfo, false); // instantiate shape from info
 		NodeCount++;
 		if (shape.GetComponent<DestinationTarget>() != null)
 		{
@@ -60,6 +60,7 @@ public class AddShapeWaypoint : MonoBehaviour
 			shape.GetComponent<DestinationTarget>().Activate(true);
 			shape.GetComponent<DestinationTarget>().DestinationName = name;
 		}
+		
 		shapeObjList.Add(shape);
 
 	}
@@ -67,14 +68,12 @@ public class AddShapeWaypoint : MonoBehaviour
 	public void OnAddShapeClick()
 	{
 		Vector3 pos = Camera.main.transform.position;
-		pos.y = -.5f;
 		AddShape(pos, Quaternion.Euler(Vector3.zero), false, null);
 	}
 
 	public void OnAddTriggerClicked()
 	{
 		Vector3 pos = Camera.main.transform.position;
-		pos.y = -.5f;
 		Quaternion dropRotation = Camera.main.transform.rotation;
 		inputmanager.DestinationNamePopUp.gameObject.SetActive(true);
 		StartCoroutine(WaitForDestinationName(pos, dropRotation));
@@ -129,12 +128,29 @@ public class AddShapeWaypoint : MonoBehaviour
 		shape.transform.position = position; // transform the created shape to the metadata position
 		shape.transform.rotation = new Quaternion(info.qx, info.qy, info.qz, info.qw);
 		shape.transform.localScale = new Vector3(.3f, .3f, .3f);
-		if (shape.GetComponent<DestinationTarget>() != null)
-		{
-			shape.GetComponent<DestinationTarget>().DestinationName = info.name;
-			shape.name = info.name;
-		}
 
+		if(CreateMapSample.mapStatus == CreateMapSample.Status.Mapping)
+		{
+			if (shape.GetComponent<DestinationTarget>() != null)
+			{
+				shape.GetComponent<DestinationTarget>().DestinationName = info.name;
+				shape.name = info.name;
+				shape.GetComponent<DestinationTarget>().Activate(true);
+			}
+		}
+		else if(CreateMapSample.mapStatus == CreateMapSample.Status.Running)
+		{
+			if (shape.GetComponent<DestinationTarget>() != null)
+			{
+				shape.GetComponent<DestinationTarget>().DestinationName = info.name;
+				shape.name = info.name;
+				shape.GetComponent<DestinationTarget>().Activate(false);
+			}
+			else if (shape.GetComponent<Waypoint>() != null)
+			{
+				shape.GetComponent<Waypoint>().Activate(false);
+			}
+		}
 		return shape;
 	}
 
