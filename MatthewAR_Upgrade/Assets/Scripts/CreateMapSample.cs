@@ -117,6 +117,12 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 
 	public void OnRadiusSelect()
 	{
+		if (!Input.location.isEnabledByUser)
+		{
+			statusText.text = "Location service is unavailable";
+			return;
+		}
+			
 		Debug.Log("Map search:" + mRadiusSlider.value.ToString("F2"));
 		statusText.text = "Filtering maps by GPS location";
 
@@ -326,6 +332,7 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 		}
 		shapeManager.nodeLoaded = false;
 	}
+
 	public void OnFindPathClicked()
 	{
 		if(navController != null)
