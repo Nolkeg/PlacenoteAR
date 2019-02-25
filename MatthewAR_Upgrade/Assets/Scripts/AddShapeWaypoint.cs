@@ -68,12 +68,14 @@ public class AddShapeWaypoint : MonoBehaviour
 	public void OnAddShapeClick()
 	{
 		Vector3 pos = Camera.main.transform.position;
+		pos.y -= 0.5f;
 		AddShape(pos, Quaternion.Euler(Vector3.zero), false, null);
 	}
 
 	public void OnAddTriggerClicked()
 	{
 		Vector3 pos = Camera.main.transform.position;
+		pos.y -= 0.5f;
 		Quaternion dropRotation = Camera.main.transform.rotation;
 		inputmanager.DestinationNamePopUp.gameObject.SetActive(true);
 		StartCoroutine(WaitForDestinationName(pos, dropRotation));
@@ -83,7 +85,7 @@ public class AddShapeWaypoint : MonoBehaviour
 	{
 		Vector3 dropPosition = Camera.main.transform.position + Camera.main.transform.forward * 0.3f;
 		Quaternion dropRotation = Camera.main.transform.rotation;
-
+		dropPosition.y -= 0.5f;
 		AddShape(dropPosition, dropRotation, false, null);
 
 	}
@@ -92,7 +94,7 @@ public class AddShapeWaypoint : MonoBehaviour
 	{
 		Vector3 dropPosition = Camera.main.transform.position + Camera.main.transform.forward * 0.3f;
 		Quaternion dropRotation = Camera.main.transform.rotation;
-
+		dropPosition.y -= 0.5f;
 		inputmanager.DestinationNamePopUp.gameObject.SetActive(true);
 		StartCoroutine(WaitForDestinationName(dropPosition, dropRotation));
 
