@@ -13,12 +13,16 @@ public class NavController : MonoBehaviour {
     private List<Node> path = new List<Node>();
     private int currNodeIndex = 0;
     private float maxDistance = 1.1f;
+	[SerializeField] NodeFinder nodeFinder;
 	
 	public void ReSetParameter()
 	{
 		_initialized = false;
 		_initializedComplete = false;
+		currNodeIndex = 0;
+		nodeFinder.ResetParameters();
 		allNodes.Clear();
+		StopAllCoroutines();
 	}
 
     private void Start() {
@@ -26,7 +30,6 @@ public class NavController : MonoBehaviour {
 		//otherwise, only start navigation when load shape from json is done
 		//InitializeNavigation();
 #endif
-		
     }
 
     /// <summary>
@@ -115,27 +118,50 @@ public class NavController : MonoBehaviour {
             }
             //activate first node and rotate it to the next node
             path[0].Activate(true);
-            _initializedComplete = true; // a flag to check if all node is load before we can move
+			nodeFinder.currentNodeRen = path[0].meshRenderer;
+			_initializedComplete = true; // a flag to check if all node is load before we can move
 			foreach(Node node in path)
 			{
-				if(Vector3.Distance(node.transform.position,this.transform.position) < 3.5f)
+				if(Vector3.Distance(node.transform.position,this.transform.position) < 3.5f) //activate all node in this radius
 				{
 					node.Activate(true);
+					nodeFinder.currentNodeRen = node.meshRenderer;
 				}
 			}
-        }
+			StartCoroutine(DelayAssign());
+		}
     }
 
     private void OnTriggerEnter(Collider other) {
 
-        if (_initializedComplete && other.CompareTag("waypoint")) { //if enter waypoint arrow
-            currNodeIndex = path.IndexOf(other.GetComponent<Node>()); //get the index of the node we hit
+        if (_initializedComplete && other.CompareTag("waypoint") && path.Contains(other.GetComponent<Node>()))
+		{
+            int tempIndex = path.IndexOf(other.GetComponent<Node>()); //get the index of the node we hit
+
+			if(tempIndex > currNodeIndex) //check whether the object we hit is next in path
+			{
+				currNodeIndex = tempIndex; //if so, set the current index to the next in path
+			}
+			else
+			{
+				return; //if it is the already activated path just return;
+			}
+
             if (currNodeIndex < path.Count - 1) { //if the index we get is not the destination
                 path[currNodeIndex + 1].Activate(true); //activate the next in list node;
-            }
+			}
         }
     }
-
+	IEnumerator DelayAssign()
+	{
+		while(true)
+		{
+			yield return new WaitForSecondsRealtime(0.5f);
+			nodeFinder.currentNodeRen = path[currNodeIndex].meshRenderer;
+		}
+		
+	}
+	
 	
 
 

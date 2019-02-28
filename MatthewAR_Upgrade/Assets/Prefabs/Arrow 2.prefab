@@ -59,6 +59,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pos: {x: 0, y: 0, z: 0}
+  meshRenderer: {fileID: 23297859635034978}
   neighbors: []
 --- !u!1 &1524812944869476
 GameObject:

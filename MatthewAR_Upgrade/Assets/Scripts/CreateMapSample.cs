@@ -435,8 +435,7 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 		DropdownList.value = 0;
 		DropdownList.options.Clear();
 		shapeManager.ClearShapes();
-		navController._initialized = false;
-		navController._initializedComplete = false;
+		navController.ReSetParameter();
 	}
 
 	

@@ -60,6 +60,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   diamond: {fileID: 1889600940015092}
+  DestinationName: 
 --- !u!114 &381503836101841421
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73,6 +74,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pos: {x: 0, y: 0, z: 0}
+  meshRenderer: {fileID: 23965354378215418}
   neighbors: []
 --- !u!1 &1889600940015092
 GameObject:

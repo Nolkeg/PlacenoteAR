@@ -6,6 +6,7 @@ using System.Linq;
 public class Node : MonoBehaviour {
 
     public Vector3 pos;
+	public Renderer meshRenderer;
 
     [Header("A*")]
     public List<Node> neighbors = new List<Node>();
@@ -33,7 +34,6 @@ public class Node : MonoBehaviour {
     }
 	//call after next in list is set
     public void Activate(bool active) {
-		Debug.Log(transform.name);
         transform.GetChild(0).gameObject.SetActive(active);
         if (NextInList != null) {
             transform.LookAt(NextInList.transform);
