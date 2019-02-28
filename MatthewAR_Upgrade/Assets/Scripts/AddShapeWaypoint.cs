@@ -76,9 +76,8 @@ public class AddShapeWaypoint : MonoBehaviour
 	{
 		Vector3 pos = Camera.main.transform.position;
 		pos.y -= 0.25f;
-		Quaternion dropRotation = Camera.main.transform.rotation;
 		inputmanager.DestinationNamePopUp.gameObject.SetActive(true);
-		StartCoroutine(WaitForDestinationName(pos, dropRotation));
+		StartCoroutine(WaitForDestinationName(pos, Quaternion.Euler(Vector3.zero)));
 	}
 
 	IEnumerator WaitForDestinationName(Vector3 pos, Quaternion rot)

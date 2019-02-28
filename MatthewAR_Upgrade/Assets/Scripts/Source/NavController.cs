@@ -122,7 +122,7 @@ public class NavController : MonoBehaviour {
 			_initializedComplete = true; // a flag to check if all node is load before we can move
 			foreach(Node node in path)
 			{
-				if(Vector3.Distance(node.transform.position,this.transform.position) < 3.5f) //activate all node in this radius
+				if(Vector3.Distance(node.transform.position,this.transform.position) < 3f) //activate all node in this radius
 				{
 					node.Activate(true);
 					nodeFinder.currentNodeRen = node.meshRenderer;
@@ -141,6 +141,11 @@ public class NavController : MonoBehaviour {
 			if(tempIndex > currNodeIndex) //check whether the object we hit is next in path
 			{
 				currNodeIndex = tempIndex; //if so, set the current index to the next in path
+			}
+			else if(tempIndex == currNodeIndex)
+			{
+				currNodeIndex = tempIndex;
+				path[currNodeIndex].Activate(true);
 			}
 			else
 			{

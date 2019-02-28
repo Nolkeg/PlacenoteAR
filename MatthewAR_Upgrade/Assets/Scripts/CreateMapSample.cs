@@ -29,6 +29,7 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 	[SerializeField] TMP_Dropdown DropdownList;
 	[SerializeField] TextMeshProUGUI statusText;
 
+	private bool localizeFirstTime;
 	private InputManager inputManager;
 	public NavController navController;
 	private UnityARSessionNativeInterface mSession;
@@ -56,6 +57,7 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 
 	void Start()
     {
+		localizeFirstTime = false;
 		haveMapName = false;
 		mSession = UnityARSessionNativeInterface.GetARSessionNativeInterface();
 		StartARKit();
@@ -380,7 +382,7 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 					mMapSelectedPanel.SetActive(false);
 					mMapListPanel.SetActive(false);
 					mInitButtonPanel.SetActive(false);
-					mMappingButtonPanel.SetActive(true);
+					mMappingButtonPanel.SetActive(false);
 					mExitButton.SetActive(true);
 					DropdownList.gameObject.SetActive(true);
 					LoadDestinationList();
@@ -424,6 +426,7 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 
 	public void OnExitClick()
 	{
+		localizeFirstTime = false;
 		mInitButtonPanel.SetActive(true);
 		mExitButton.SetActive(false);
 		mMappingButtonPanel.SetActive(false);
@@ -443,17 +446,22 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 	// Runs when a new pose is received from Placenote.    
 	public void OnPose(Matrix4x4 outputPose, Matrix4x4 arkitPose) { }
 
+	
 	// Runs when LibPlacenote sends a status change message like Localized!
 	public void OnStatusChange(LibPlacenote.MappingStatus prevStatus, LibPlacenote.MappingStatus currStatus)
 	{
 		Debug.Log("prevStatus: " + prevStatus.ToString() + " currStatus: " + currStatus.ToString());
 		if (currStatus == LibPlacenote.MappingStatus.RUNNING && prevStatus == LibPlacenote.MappingStatus.LOST)
 		{
+			if(!localizeFirstTime)
+			{
+				localizeFirstTime = true;
+				mapStatus = Status.Running;
+				shapeManager.LoadShapesJSON(mSelectedMapInfo.metadata.userdata);
+				FeaturesVisualizer.DisablePointcloud(); //if player is doing navigation, disable point cloud
+				LoadDestinationList();
+			}
 			statusText.text = "Localized";
-			mapStatus = Status.Running;
-			GetComponent<AddShapeWaypoint>().LoadShapesJSON(mSelectedMapInfo.metadata.userdata);
-			FeaturesVisualizer.DisablePointcloud(); //if player is doing navigation, disable point cloud
-			LoadDestinationList();
 		}
 		else if (currStatus == LibPlacenote.MappingStatus.RUNNING && prevStatus == LibPlacenote.MappingStatus.WAITING)
 		{
