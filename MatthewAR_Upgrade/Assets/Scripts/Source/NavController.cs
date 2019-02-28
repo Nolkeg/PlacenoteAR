@@ -24,8 +24,9 @@ public class NavController : MonoBehaviour {
     private void Start() {
 #if UNITY_EDITOR //test initialize navigation in unity editor
 		//otherwise, only start navigation when load shape from json is done
-        //InitializeNavigation();
+		//InitializeNavigation();
 #endif
+		
     }
 
     /// <summary>
@@ -115,6 +116,13 @@ public class NavController : MonoBehaviour {
             //activate first node and rotate it to the next node
             path[0].Activate(true);
             _initializedComplete = true; // a flag to check if all node is load before we can move
+			foreach(Node node in path)
+			{
+				if(Vector3.Distance(node.transform.position,this.transform.position) < 3.5f)
+				{
+					node.Activate(true);
+				}
+			}
         }
     }
 
@@ -127,4 +135,8 @@ public class NavController : MonoBehaviour {
             }
         }
     }
+
+	
+
+
 }

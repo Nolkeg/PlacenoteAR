@@ -68,38 +68,19 @@ public class AddShapeWaypoint : MonoBehaviour
 	public void OnAddShapeClick()
 	{
 		Vector3 pos = Camera.main.transform.position;
-		pos.y -= 0.5f;
+		pos.y -= 0.25f;
 		AddShape(pos, Quaternion.Euler(Vector3.zero), false, null);
 	}
 
 	public void OnAddTriggerClicked()
 	{
 		Vector3 pos = Camera.main.transform.position;
-		pos.y -= 0.5f;
+		pos.y -= 0.25f;
 		Quaternion dropRotation = Camera.main.transform.rotation;
 		inputmanager.DestinationNamePopUp.gameObject.SetActive(true);
 		StartCoroutine(WaitForDestinationName(pos, dropRotation));
 	}
 
-	public void OnSimulatorDropShape()
-	{
-		Vector3 dropPosition = Camera.main.transform.position + Camera.main.transform.forward * 0.3f;
-		Quaternion dropRotation = Camera.main.transform.rotation;
-		dropPosition.y -= 0.5f;
-		AddShape(dropPosition, dropRotation, false, null);
-
-	}
-
-	public void OnSimulatorDropTrigger()
-	{
-		Vector3 dropPosition = Camera.main.transform.position + Camera.main.transform.forward * 0.3f;
-		Quaternion dropRotation = Camera.main.transform.rotation;
-		dropPosition.y -= 0.5f;
-		inputmanager.DestinationNamePopUp.gameObject.SetActive(true);
-		StartCoroutine(WaitForDestinationName(dropPosition, dropRotation));
-
-
-	}
 	IEnumerator WaitForDestinationName(Vector3 pos, Quaternion rot)
 	{
 		yield return new WaitUntil(() => canProgress == true);

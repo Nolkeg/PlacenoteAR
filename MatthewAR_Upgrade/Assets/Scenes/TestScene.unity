@@ -476,10 +476,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2.5
+  m_Radius: 3
+  m_Height: 5
   m_Direction: 1
-  m_Center: {x: 0, y: -0.5, z: 0}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &1014750224
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -821,7 +821,7 @@ PrefabInstance:
     - target: {fileID: 6926171909195604469, guid: 26dd121b45b65cd47ab944e50f5c8daf,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnSimulatorDropTrigger
+      value: OnAddTriggerClicked
       objectReference: {fileID: 0}
     - target: {fileID: 1153128452577898151, guid: 26dd121b45b65cd47ab944e50f5c8daf,
         type: 3}
@@ -1021,7 +1021,7 @@ PrefabInstance:
     - target: {fileID: 3094176171079862785, guid: 26dd121b45b65cd47ab944e50f5c8daf,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnSimulatorDropShape
+      value: OnAddShapeClick
       objectReference: {fileID: 0}
     - target: {fileID: 3094176169357958568, guid: 26dd121b45b65cd47ab944e50f5c8daf,
         type: 3}
