@@ -1714,6 +1714,58 @@ MonoBehaviour:
         xAdvance: 0
         yAdvance: 0
       xOffset: 0
+    - m_FirstGlyph: 3635
+      m_FirstGlyphAdjustments:
+        xPlacement: 0
+        yPlacement: 0
+        xAdvance: 0
+        yAdvance: 0
+      m_SecondGlyph: 3656
+      m_SecondGlyphAdjustments:
+        xPlacement: -14
+        yPlacement: 10.5
+        xAdvance: 0
+        yAdvance: 0
+      xOffset: 0
+    - m_FirstGlyph: 3635
+      m_FirstGlyphAdjustments:
+        xPlacement: 0
+        yPlacement: 0
+        xAdvance: 0
+        yAdvance: 0
+      m_SecondGlyph: 3657
+      m_SecondGlyphAdjustments:
+        xPlacement: -14
+        yPlacement: 10.5
+        xAdvance: 0
+        yAdvance: 0
+      xOffset: 0
+    - m_FirstGlyph: 3635
+      m_FirstGlyphAdjustments:
+        xPlacement: 0
+        yPlacement: 0
+        xAdvance: 0
+        yAdvance: 0
+      m_SecondGlyph: 3658
+      m_SecondGlyphAdjustments:
+        xPlacement: -14
+        yPlacement: 10.5
+        xAdvance: 0
+        yAdvance: 0
+      xOffset: 0
+    - m_FirstGlyph: 3635
+      m_FirstGlyphAdjustments:
+        xPlacement: 0
+        yPlacement: 0
+        xAdvance: 0
+        yAdvance: 0
+      m_SecondGlyph: 3659
+      m_SecondGlyphAdjustments:
+        xPlacement: -14
+        yPlacement: 10.5
+        xAdvance: 0
+        yAdvance: 0
+      xOffset: 0
     - m_FirstGlyph: 3636
       m_FirstGlyphAdjustments:
         xPlacement: 0
@@ -1922,17 +1974,69 @@ MonoBehaviour:
         xAdvance: 0
         yAdvance: 0
       xOffset: 0
+    - m_FirstGlyph: 3656
+      m_FirstGlyphAdjustments:
+        xPlacement: 1.21
+        yPlacement: 10.5
+        xAdvance: 0
+        yAdvance: 0
+      m_SecondGlyph: 3635
+      m_SecondGlyphAdjustments:
+        xPlacement: 0
+        yPlacement: 0
+        xAdvance: 0
+        yAdvance: 0
+      xOffset: 0
+    - m_FirstGlyph: 3657
+      m_FirstGlyphAdjustments:
+        xPlacement: 2.18
+        yPlacement: 10.5
+        xAdvance: 0
+        yAdvance: 0
+      m_SecondGlyph: 3635
+      m_SecondGlyphAdjustments:
+        xPlacement: 0
+        yPlacement: 0
+        xAdvance: 0
+        yAdvance: 0
+      xOffset: 0
+    - m_FirstGlyph: 3658
+      m_FirstGlyphAdjustments:
+        xPlacement: 7.64
+        yPlacement: 10.5
+        xAdvance: 0
+        yAdvance: 0
+      m_SecondGlyph: 3635
+      m_SecondGlyphAdjustments:
+        xPlacement: 0
+        yPlacement: 0
+        xAdvance: 0
+        yAdvance: 0
+      xOffset: 0
+    - m_FirstGlyph: 3659
+      m_FirstGlyphAdjustments:
+        xPlacement: 5.79
+        yPlacement: 10.5
+        xAdvance: 0
+        yAdvance: 0
+      m_SecondGlyph: 3635
+      m_SecondGlyphAdjustments:
+        xPlacement: 0
+        yPlacement: 0
+        xAdvance: 0
+        yAdvance: 0
+      xOffset: 0
   m_kerningPair:
-    m_FirstGlyph: 3633
+    m_FirstGlyph: 3659
     m_FirstGlyphAdjustments:
       xPlacement: 0
-      yPlacement: 0
+      yPlacement: 10.5
       xAdvance: 0
       yAdvance: 0
-    m_SecondGlyph: 3659
+    m_SecondGlyph: 3635
     m_SecondGlyphAdjustments:
       xPlacement: 0
-      yPlacement: 10.5
+      yPlacement: 0
       xAdvance: 0
       yAdvance: 0
     xOffset: 0

@@ -274,6 +274,7 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 				JObject shapeList = shapeManager.Shapes2JSON();
 
 				userdata["shapeList"] = shapeList;
+				//can add userdata of trigger later
 				shapeManager.ClearShapes();
 
 				if (useLocation)
@@ -387,7 +388,7 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 					DropdownList.gameObject.SetActive(true);
 					LoadDestinationList();
 
-					LibPlacenote.Instance.StartSession(true);
+					LibPlacenote.Instance.StartSession();
 
 					if (mReportDebug)
 					{
@@ -493,7 +494,6 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 		var tempDesArray = FindObjectsOfType<DestinationTarget>();
 		if (tempDesArray == null)
 		{
-			Debug.Log("did not find diamond");
 			yield break;
 		}
 
@@ -515,7 +515,9 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 			data.text = name;
 			DropdownList.options.Add(data);
 		}
+
 		DropdownList.RefreshShownValue();
+
 		if(destination == null)
 		{
 			destination = destinationList[0].GetComponent<Node>();
