@@ -121,18 +121,24 @@ public class NavController : MonoBehaviour {
 			nodeFinder.currentNodeRen = path[0].meshRenderer;
 			_initializedComplete = true; // a flag to check if all node is load before we can move
 
-			foreach(Node node in path)
-			{
-				if(Vector3.Distance(node.transform.position,this.transform.position) < 3f) //activate all node in this radius
-				{
-					node.Activate(true);
-					nodeFinder.currentNodeRen = node.meshRenderer;
-				}
-			}
+			StartCoroutine(DelayPopUp(path));
 
 			StartCoroutine(DelayAssign());
 		}
     }
+
+	IEnumerator DelayPopUp(List<Node> path)
+	{
+		foreach (Node node in path)
+		{
+			if (Vector3.Distance(node.transform.position, this.transform.position) < 5.5f) //activate all node in this radius
+			{
+				node.Activate(true);
+				nodeFinder.currentNodeRen = node.meshRenderer;
+				yield return new WaitForSecondsRealtime(0.5f);
+			}
+		}
+	}
 
     private void OnTriggerEnter(Collider other) {
 
@@ -160,6 +166,7 @@ public class NavController : MonoBehaviour {
 			}
         }
     }
+
 	IEnumerator DelayAssign()
 	{
 		while(true)
