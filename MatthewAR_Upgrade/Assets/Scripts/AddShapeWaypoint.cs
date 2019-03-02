@@ -20,11 +20,13 @@ public class AddShapeWaypoint : MonoBehaviour
 	private GameObject lastShape;
 	string currentDesName;
 	public bool canProgress;
+	bool shouldSpawnWaypoint;
 
 	private void Start()
 	{
 		inputmanager = GetComponent<InputManager>();
 		canProgress = false;
+		shouldSpawnWaypoint = false;
 	}
 	int NodeCount = 0;
 	public bool shapesLoaded = false;
@@ -65,17 +67,42 @@ public class AddShapeWaypoint : MonoBehaviour
 
 	}
 
+	void Update()
+	{
+		if (Input.GetKey(KeyCode.P)||shouldSpawnWaypoint)
+		{
+			Transform player = navController.transform;
+			Collider[] hitColliders = Physics.OverlapSphere(player.position, 1f);
+			int i = 0;
+			while (i < hitColliders.Length)
+			{
+				if (hitColliders[i].CompareTag("waypoint"))
+				{
+					return;
+				}
+				i++;
+			}
+			Vector3 pos = player.position;
+			pos.y = -.5f;
+			AddShape(pos, Quaternion.Euler(Vector3.zero), false, null);
+		}
+	}
+
+	
+	public void OnAddShapeUp()
+	{
+		shouldSpawnWaypoint = false;
+	}
+
 	public void OnAddShapeClick()
 	{
-		Vector3 pos = Camera.main.transform.position;
-		pos.y -= 0.25f;
-		AddShape(pos, Quaternion.Euler(Vector3.zero), false, null);
+		shouldSpawnWaypoint = true;
 	}
 
 	public void OnAddTriggerClicked()
 	{
 		Vector3 pos = Camera.main.transform.position;
-		pos.y -= 0.25f;
+		pos.y -= 0.5f;
 		inputmanager.DestinationNamePopUp.gameObject.SetActive(true);
 		StartCoroutine(WaitForDestinationName(pos, Quaternion.Euler(Vector3.zero)));
 	}

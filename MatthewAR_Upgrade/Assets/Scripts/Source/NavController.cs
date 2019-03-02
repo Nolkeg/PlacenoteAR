@@ -120,6 +120,7 @@ public class NavController : MonoBehaviour {
             path[0].Activate(true);
 			nodeFinder.currentNodeRen = path[0].meshRenderer;
 			_initializedComplete = true; // a flag to check if all node is load before we can move
+
 			foreach(Node node in path)
 			{
 				if(Vector3.Distance(node.transform.position,this.transform.position) < 3f) //activate all node in this radius
@@ -128,6 +129,7 @@ public class NavController : MonoBehaviour {
 					nodeFinder.currentNodeRen = node.meshRenderer;
 				}
 			}
+
 			StartCoroutine(DelayAssign());
 		}
     }
@@ -136,6 +138,7 @@ public class NavController : MonoBehaviour {
 
         if (_initializedComplete && other.CompareTag("waypoint") && path.Contains(other.GetComponent<Node>()))
 		{
+			print("found node");
             int tempIndex = path.IndexOf(other.GetComponent<Node>()); //get the index of the node we hit
 
 			if(tempIndex > currNodeIndex) //check whether the object we hit is next in path
