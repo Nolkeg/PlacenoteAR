@@ -1321,8 +1321,14 @@ PrefabInstance:
     - target: {fileID: 6494880271998576384, guid: 26dd121b45b65cd47ab944e50f5c8daf,
         type: 3}
       propertyPath: m_hasFontAssetChanged
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6494880271998576384, guid: 26dd121b45b65cd47ab944e50f5c8daf,
+        type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 21646030352909382, guid: 5f3fdb8bc81eda44ebf500029422a5d7,
+        type: 2}
     - target: {fileID: 3825536756493550871, guid: 26dd121b45b65cd47ab944e50f5c8daf,
         type: 3}
       propertyPath: m_IsActive
@@ -1828,12 +1834,17 @@ PrefabInstance:
     - target: {fileID: 2729285078742051938, guid: 26dd121b45b65cd47ab944e50f5c8daf,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -55.4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 254287945358700467, guid: 26dd121b45b65cd47ab944e50f5c8daf,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 204.32
+      value: 109
+      objectReference: {fileID: 0}
+    - target: {fileID: 254287945358700467, guid: 26dd121b45b65cd47ab944e50f5c8daf,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -67
       objectReference: {fileID: 0}
     - target: {fileID: 3893063929187967969, guid: 26dd121b45b65cd47ab944e50f5c8daf,
         type: 3}
@@ -1859,8 +1870,14 @@ PrefabInstance:
     - target: {fileID: 3893063929187967969, guid: 26dd121b45b65cd47ab944e50f5c8daf,
         type: 3}
       propertyPath: m_hasFontAssetChanged
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3893063929187967969, guid: 26dd121b45b65cd47ab944e50f5c8daf,
+        type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 21646030352909382, guid: 5f3fdb8bc81eda44ebf500029422a5d7,
+        type: 2}
     - target: {fileID: 5262839075583667552, guid: 26dd121b45b65cd47ab944e50f5c8daf,
         type: 3}
       propertyPath: m_fontAsset
@@ -2119,6 +2136,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_FillCenter
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8442034693809382941, guid: 26dd121b45b65cd47ab944e50f5c8daf,
+        type: 3}
+      propertyPath: m_Name
+      value: Apply Button
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 26dd121b45b65cd47ab944e50f5c8daf, type: 3}

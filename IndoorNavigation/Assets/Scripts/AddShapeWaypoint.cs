@@ -19,13 +19,14 @@ public class AddShapeWaypoint : MonoBehaviour
 	InputManager inputmanager;
 	private GameObject lastShape;
 	string currentDesName;
-	public bool canProgress;
+	public bool canAddDestination;
 	bool shouldSpawnWaypoint;
+	IEnumerator destinationCouroutine = null;
 
 	private void Start()
 	{
 		inputmanager = GetComponent<InputManager>();
-		canProgress = false;
+		canAddDestination = false;
 		shouldSpawnWaypoint = false;
 	}
 	int NodeCount = 0;
@@ -83,7 +84,7 @@ public class AddShapeWaypoint : MonoBehaviour
 				i++;
 			}
 			Vector3 pos = player.position;
-			pos.y = -.5f;
+			pos.y -= 0.5f;
 			AddShape(pos, Quaternion.Euler(Vector3.zero), false, null);
 		}
 	}
@@ -104,14 +105,20 @@ public class AddShapeWaypoint : MonoBehaviour
 		Vector3 pos = Camera.main.transform.position;
 		pos.y -= 0.5f;
 		inputmanager.DestinationNamePopUp.gameObject.SetActive(true);
-		StartCoroutine(WaitForDestinationName(pos, Quaternion.Euler(Vector3.zero)));
+		destinationCouroutine = WaitForDestinationName(pos, Quaternion.Euler(Vector3.zero));
+		StartCoroutine(destinationCouroutine);
+	}
+	public void CanCelAddDestination()
+	{
+		StopCoroutine(destinationCouroutine);
+		destinationCouroutine = null;
 	}
 
 	IEnumerator WaitForDestinationName(Vector3 pos, Quaternion rot)
 	{
-		yield return new WaitUntil(() => canProgress == true);
+		yield return new WaitUntil(() => canAddDestination == true);
 		AddShape(pos, rot, true, inputmanager.DestinationName);
-		canProgress = false;
+		canAddDestination = false;
 	}
 
 	//create shape from info method

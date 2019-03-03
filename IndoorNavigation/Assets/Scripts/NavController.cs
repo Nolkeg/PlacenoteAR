@@ -131,7 +131,7 @@ public class NavController : MonoBehaviour {
 	{
 		foreach (Node node in path)
 		{
-			if (Vector3.Distance(node.transform.position, this.transform.position) < 5.5f) //activate all node in this radius
+			if (Vector3.Distance(node.transform.position, this.transform.position) < 6.5f) //activate all node in this radius
 			{
 				node.Activate(true);
 				nodeFinder.currentNodeRen = node.meshRenderer;

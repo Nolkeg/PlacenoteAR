@@ -32,8 +32,13 @@ public class InputManager : MonoBehaviour
 	public void OnApplyDestinationNameClicked()
 	{
 		DestinationName = DestinationNamePopUp.text;
-		shapemanager.canProgress = true;
+		shapemanager.canAddDestination = true;
 		DestinationNamePopUp.gameObject.SetActive(false);
 	}
 	
+	public void OnCancleDestinationNameClicked()
+	{
+		DestinationNamePopUp.gameObject.SetActive(false);
+		shapemanager.CanCelAddDestination();
+	}
 }
