@@ -73,7 +73,7 @@ public class AddShapeWaypoint : MonoBehaviour
 		if (Input.GetKey(KeyCode.P)||shouldSpawnWaypoint)
 		{
 			Transform player = navController.transform;
-			Collider[] hitColliders = Physics.OverlapSphere(player.position, 1f);
+			Collider[] hitColliders = Physics.OverlapSphere(player.position, 1.3f);
 			int i = 0;
 			while (i < hitColliders.Length)
 			{
@@ -84,7 +84,7 @@ public class AddShapeWaypoint : MonoBehaviour
 				i++;
 			}
 			Vector3 pos = player.position;
-			pos.y -= 0.5f;
+			pos.y -= 1f;
 			AddShape(pos, Quaternion.Euler(Vector3.zero), false, null);
 		}
 	}
@@ -102,10 +102,8 @@ public class AddShapeWaypoint : MonoBehaviour
 
 	public void OnAddTriggerClicked()
 	{
-		Vector3 pos = Camera.main.transform.position;
-		pos.y -= 0.5f;
 		inputmanager.DestinationNamePopUp.gameObject.SetActive(true);
-		destinationCouroutine = WaitForDestinationName(pos, Quaternion.Euler(Vector3.zero));
+		destinationCouroutine = WaitForDestinationName();
 		StartCoroutine(destinationCouroutine);
 	}
 	public void CanCelAddDestination()
@@ -114,10 +112,11 @@ public class AddShapeWaypoint : MonoBehaviour
 		destinationCouroutine = null;
 	}
 
-	IEnumerator WaitForDestinationName(Vector3 pos, Quaternion rot)
+	IEnumerator WaitForDestinationName()
 	{
 		yield return new WaitUntil(() => canAddDestination == true);
-		AddShape(pos, rot, true, inputmanager.DestinationName);
+		Vector3 pos = Camera.main.transform.position;
+		AddShape(pos, Quaternion.identity, true, inputmanager.DestinationName);
 		canAddDestination = false;
 	}
 

@@ -71,8 +71,8 @@ public class AStar : MonoBehaviour {
     private float GetEstimate(Node first, Node second) {
         float distance;
 
-        float xDistance = Mathf.Abs(first.pos.x - second.pos.x);
-        float yDistance = Mathf.Abs(first.pos.z - second.pos.z);
+        float xDistance = Mathf.Abs(first.pos.x - first.pos.x);
+        float yDistance = Mathf.Abs(second.pos.z - second.pos.z);
 
         if (xDistance > yDistance) {
             distance = 14 * yDistance + 10 * (xDistance - yDistance);

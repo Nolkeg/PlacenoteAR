@@ -10,13 +10,17 @@ public class NavController : MonoBehaviour {
     private Transform destination;
     public bool _initialized = false;
     public bool _initializedComplete = false;
-    private List<Node> path = new List<Node>();
+    public List<Node> path = new List<Node>();
     private int currNodeIndex = 0;
-    private float maxDistance = 1.1f;
+    private float maxDistance = 1.5f;
 	[SerializeField] NodeFinder nodeFinder;
 	
 	public void ReSetParameter()
 	{
+		foreach(Node node in allNodes)
+		{
+			node.neighbors.Clear();
+		}
 		_initialized = false;
 		_initializedComplete = false;
 		currNodeIndex = 0;
@@ -144,7 +148,6 @@ public class NavController : MonoBehaviour {
 
         if (_initializedComplete && other.CompareTag("waypoint") && path.Contains(other.GetComponent<Node>()))
 		{
-			print("found node");
             int tempIndex = path.IndexOf(other.GetComponent<Node>()); //get the index of the node we hit
 
 			if(tempIndex > currNodeIndex) //check whether the object we hit is next in path
