@@ -63,48 +63,46 @@ namespace SaveMetaData
             modelInfo.qz = rotation.z;
             modelInfo.qw = rotation.w;
             modelInfo.modelType = type;
-			//store a position and rotation into a class ref and pass that ref to a method to create object from the ref's data
 
             AddModel(modelInfo);
 
         }
 
-        public void AddModel(ModelInfo modelInfo) //add model to temp list and scene
+        public void AddModel(ModelInfo modelInfo)
         {
-            ModelInfoList.Add(modelInfo); //add the data to list of class data ref
+            ModelInfoList.Add(modelInfo);
 
-            GameObject newModel = Instantiate(modelPrefabs[modelInfo.modelType]); //create random model from the prefab array
+            GameObject newModel = Instantiate(modelPrefabs[modelInfo.modelType]);
 
-            newModel.transform.position = new Vector3(modelInfo.px, modelInfo.py, modelInfo.pz); //set position according to the parameter
-            newModel.transform.rotation = new Quaternion(modelInfo.qx, modelInfo.qy, modelInfo.qz, modelInfo.qw); // set rotation according to the parameter
+            newModel.transform.position = new Vector3(modelInfo.px, modelInfo.py, modelInfo.pz);
+            newModel.transform.rotation = new Quaternion(modelInfo.qx, modelInfo.qy, modelInfo.qz, modelInfo.qw);
 
-            ModelObjList.Add(newModel); //store the Created gameobject in the list
+            ModelObjList.Add(newModel);
         }
 
-        public void ClearModels() //destroy all created object in scene
+        public void ClearModels()
         {
             foreach (var obj in ModelObjList)
             {
                 Destroy(obj);
             }
-            ModelObjList.Clear(); //as well as clear both info and GameObject list
-            ModelInfoList.Clear(); //make sure to always save model to JSON before calling this function
+            ModelObjList.Clear();
+            ModelInfoList.Clear();
         }
 
         // Helper Functions to convert models to and from JSON
+
         public JObject Models2JSON()
         {
             ModelList modelList = new ModelList();
-            modelList.models = new ModelInfo[ModelInfoList.Count]; //create a new array of info from the temporary list count
+            modelList.models = new ModelInfo[ModelInfoList.Count];
             for (int i = 0; i < ModelInfoList.Count; i++)
             {
-                modelList.models[i] = ModelInfoList[i]; 
+                modelList.models[i] = ModelInfoList[i];
             }
 
-            return JObject.FromObject(modelList); //return json object created from the array
+            return JObject.FromObject(modelList);
         }
-
-
 
         public void LoadModelsFromJSON(JToken mapMetadata)
         {

@@ -743,16 +743,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1381605034}
     m_Modifications:
-    - target: {fileID: 5561258755870416368, guid: 26dd121b45b65cd47ab944e50f5c8daf,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 1924446366}
-    - target: {fileID: 5561258755870416368, guid: 26dd121b45b65cd47ab944e50f5c8daf,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnCancleDestinationNameClicked
-      objectReference: {fileID: 0}
     - target: {fileID: 3094176169769625092, guid: 26dd121b45b65cd47ab944e50f5c8daf,
         type: 3}
       propertyPath: m_Name
@@ -2151,6 +2141,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Apply Button
+      objectReference: {fileID: 0}
+    - target: {fileID: 5561258755870416368, guid: 26dd121b45b65cd47ab944e50f5c8daf,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1924446366}
+    - target: {fileID: 5561258755870416368, guid: 26dd121b45b65cd47ab944e50f5c8daf,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnCancleDestinationNameClicked
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 26dd121b45b65cd47ab944e50f5c8daf, type: 3}

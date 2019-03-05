@@ -17,7 +17,6 @@ public class SaveAndLoadAMap : MonoBehaviour, PlacenoteListener
     public GameObject saveMapButton;
     public GameObject loadMapButton;
     public GameObject newMapButton;
-	public GameObject extendedMapButton;
     public Text notifications;
 
     // to hold the last saved MapID
@@ -42,7 +41,6 @@ public class SaveAndLoadAMap : MonoBehaviour, PlacenoteListener
         newMapButton.SetActive(false);
         saveMapButton.SetActive(true);
         loadMapButton.SetActive(false);
-		extendedMapButton.SetActive(false);
         LibPlacenote.Instance.StartSession();
     }
 
@@ -64,7 +62,6 @@ public class SaveAndLoadAMap : MonoBehaviour, PlacenoteListener
         saveMapButton.SetActive(false);
         loadMapButton.SetActive(true);
         newMapButton.SetActive(true);
-		extendedMapButton.SetActive(false);
 
         if (!LibPlacenote.Instance.Initialized())
         {
@@ -95,42 +92,6 @@ public class SaveAndLoadAMap : MonoBehaviour, PlacenoteListener
         );
     }
 
-	public void OnExtendedMapClicked()
-	{
-		if(!LibPlacenote.Instance.Initialized())
-		{
-			notifications.text = "SDK not yet initialized";
-			return;
-		}
-
-		savedMapID = ReadMapIDFromFile();
-
-		if(savedMapID == null)
-		{
-			notifications.text = "You haven't saved a map yet";
-		}
-
-		
-
-		LibPlacenote.Instance.LoadMap(savedMapID, (completed, faulted, percentage) =>
-			{
-				if (completed)
-				{
-					LibPlacenote.Instance.StartSession(true);
-					notifications.text = "Trying to extend Map: " + savedMapID;
-				}
-				else if (faulted)
-				{
-					notifications.text = "Failed to load ID: " + savedMapID;
-				}
-				else
-				{
-					notifications.text = "Download Progress: " + percentage.ToString("F2") + "/1.0)";
-				}
-			}
-			);
-	}
-
     // Load map and relocalize. Check OnStatusChange function for behaviour upon relocalization
     public void OnLoadMapClicked()
     {
@@ -150,7 +111,7 @@ public class SaveAndLoadAMap : MonoBehaviour, PlacenoteListener
         }
 
         newMapButton.SetActive(false);
-		extendedMapButton.SetActive(true);
+        saveMapButton.SetActive(false);
 
         LibPlacenote.Instance.LoadMap(savedMapID, 
         (completed, faulted, percentage) =>    
@@ -179,8 +140,7 @@ public class SaveAndLoadAMap : MonoBehaviour, PlacenoteListener
     {
         if (currStatus == LibPlacenote.MappingStatus.RUNNING && prevStatus == LibPlacenote.MappingStatus.LOST)
         {
-			notifications.text = "Localized!";
-			saveMapButton.SetActive(true);
+            notifications.text = "Localized!";
         }
     }
 

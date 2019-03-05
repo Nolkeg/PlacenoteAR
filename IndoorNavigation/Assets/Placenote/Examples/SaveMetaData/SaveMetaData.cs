@@ -24,7 +24,7 @@ namespace SaveMetaData
 
         public Text notifications;
 
-        private bool modelsLoaded = false; // flag to check the model in scene
+        private bool modelsLoaded = false;
 
         // to hold the last saved MapID
         private string savedMapID;
@@ -110,7 +110,6 @@ namespace SaveMetaData
                     });
 
                     GetComponent<ModelManager>().ClearModels();
-					modelsLoaded = false; // importanttttttttttttttttttttttttttttttttttt********************************
 
                 }
                 else if (faulted) {
@@ -125,66 +124,8 @@ namespace SaveMetaData
 
         }
 
-		public void OnExtendedMapClicked()
-		{
-			if (!LibPlacenote.Instance.Initialized())
-			{
-				notifications.text = "SDK not yet initialized";
-				return;
-			}
 
-			// Reading the last saved MapID from file
-			savedMapID = ReadMapIDFromFile();
-
-			if (savedMapID == null)
-			{
-				notifications.text = "You haven't saved a map yet";
-				return;
-			}
-
-			initPanel.SetActive(false);
-			mappingPanel.SetActive(true);
-			localizedPanel.SetActive(true);
-
-
-			LibPlacenote.Instance.LoadMap(savedMapID,
-			(completed, faulted, percentage) =>
-			{
-				if (completed)
-				{
-					// Get the meta data as soon as the map is downloaded
-					LibPlacenote.Instance.GetMetadata(savedMapID, (LibPlacenote.MapMetadata obj) =>
-					{
-						if (obj != null)
-						{
-							downloadedMetaData = obj;
-
-							// Now try to localize the map
-							LibPlacenote.Instance.StartSession(true);
-							notifications.text = "Trying to Localize Map: " + savedMapID;
-						}
-						else
-						{
-							notifications.text = "Failed to download meta data";
-							return;
-						}
-					});
-
-				}
-				else if (faulted)
-				{
-					notifications.text = "Failed to load ID: " + savedMapID;
-				}
-				else
-				{
-					notifications.text = "Download Progress: " + percentage.ToString("F2") + "/1.0)";
-				}
-			}
-
-			);
-		}
-
-		public LibPlacenote.MapMetadataSettable CreateMetaDataObject()
+        public LibPlacenote.MapMetadataSettable CreateMetaDataObject()
         {
             LibPlacenote.MapMetadataSettable metadata = new LibPlacenote.MapMetadataSettable();
 
@@ -292,24 +233,19 @@ namespace SaveMetaData
             {
                 notifications.text = "Localized!";
 
-                if (!modelsLoaded) //if no model is load upon localization
-				{
-					modelsLoaded = true;
-					LoadModelIfNoModel();
+                if (!modelsLoaded)
+                {
+                    modelsLoaded = true;
+                    JToken modelData = downloadedMetaData.userdata;
+                    GetComponent<ModelManager>().LoadModelsFromJSON(modelData);
 
-				}
+                }
 
-				// Placenote will automatically correct the camera position on localization.
-			}
+                // Placenote will automatically correct the camera position on localization.
+            }
         }
 
-		private void LoadModelIfNoModel()
-		{
-			JToken modelData = downloadedMetaData.userdata; // create a JToken to store metadata that we downloaded when we load a map
-			GetComponent<ModelManager>().LoadModelsFromJSON(modelData); //change the Token to models in the location they're placed.
-		}
-
-		private void WriteMapIDToFile(string mapID)
+        private void WriteMapIDToFile(string mapID)
         {
             string path = Application.persistentDataPath + "/mapID.txt";
             Debug.Log(path);
