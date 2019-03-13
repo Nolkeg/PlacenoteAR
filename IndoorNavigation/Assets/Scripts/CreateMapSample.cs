@@ -28,7 +28,10 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 	[SerializeField] GameObject MapnameInputPopUp;
 	[SerializeField] TMP_Dropdown DropdownList;
 	[SerializeField] TextMeshProUGUI statusText;
-
+	[SerializeField] GameObject waitPopUp;
+	[SerializeField] GameObject scanPopup;
+	[SerializeField] GameObject selectDesPopUp;
+ 
 	private bool localizeFirstTime;
 	private InputManager inputManager;
 	public NavController navController;
@@ -42,6 +45,14 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 		get
 		{
 			return mSelectedMapInfo != null ? mSelectedMapInfo.placeId : null;
+		}
+	}
+
+	private string mSelectedMapName
+	{
+		get
+		{
+			return mSelectedMapInfo != null ? mSelectedMapInfo.metadata.name : null;
 		}
 	}
 	private string mSaveMapId = null;
@@ -340,9 +351,9 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 	{
 		if(navController != null)
 		{
-
 			navController.ReSetParameter();
 			StartCoroutine(PrepareNode());
+			selectDesPopUp.SetActive(false);
 		}
 	}
 
@@ -411,7 +422,9 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 						Debug.Log("Started Debug Report");
 					}
 
-					statusText.text = "Loaded ID: " + mSelectedMapId;
+					statusText.text = "Loaded Map: " + mSelectedMapName;
+					waitPopUp.SetActive(false);
+					scanPopup.SetActive(true);
 				}
 				else if (faulted)
 				{
@@ -420,6 +433,7 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 				else
 				{
 					statusText.text = "Map Download: " + percentage.ToString("F2") + "/1.0";
+					waitPopUp.SetActive(true);
 				}
 			}
 		);
@@ -432,6 +446,9 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 		mExitButton.SetActive(false);
 		mMappingButtonPanel.SetActive(false);
 		DropdownList.gameObject.SetActive(false);
+		scanPopup.SetActive(false);
+		selectDesPopUp.SetActive(false);
+		waitPopUp.SetActive(false);
 		LibPlacenote.Instance.StopSession();
 		FeaturesVisualizer.clearPointcloud();
 		destination = null;
@@ -461,6 +478,8 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 				shapeManager.LoadShapesJSON(mSelectedMapInfo.metadata.userdata);
 				FeaturesVisualizer.DisablePointcloud(); //if player is doing navigation, disable point cloud
 				LoadDestinationList();
+				scanPopup.SetActive(false);
+				selectDesPopUp.SetActive(true);
 			}
 			statusText.text = "Localized";
 		}
