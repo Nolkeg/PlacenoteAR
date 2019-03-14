@@ -386,15 +386,18 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 			return;
 		}
 
-		statusText.text = "Loading Map ID: " + mSelectedMapId;
+		statusText.text = "Loading Map: " + mSelectedMapName;
+
+		mMapSelectedPanel.SetActive(false);
+		mMapListPanel.SetActive(false);
+		mInitButtonPanel.SetActive(false);
+		mMappingButtonPanel.SetActive(false);
+		waitPopUp.SetActive(true);
+
 		LibPlacenote.Instance.LoadMap(mSelectedMapId,
 			(completed, faulted, percentage) => {
 				if (completed)
 				{
-					mMapSelectedPanel.SetActive(false);
-					mMapListPanel.SetActive(false);
-					mInitButtonPanel.SetActive(false);
-					mMappingButtonPanel.SetActive(false);
 					mExitButton.SetActive(true);
 					DropdownList.gameObject.SetActive(true);
 					LoadDestinationList();
@@ -433,7 +436,7 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 				else
 				{
 					statusText.text = "Map Download: " + percentage.ToString("F2") + "/1.0";
-					waitPopUp.SetActive(true);
+					
 				}
 			}
 		);
