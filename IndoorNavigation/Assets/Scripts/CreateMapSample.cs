@@ -500,7 +500,11 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 		}
 		else if (currStatus == LibPlacenote.MappingStatus.WAITING)
 		{
-			mapStatus = Status.Waiting;
+            if(selectDesPopUp.activeInHierarchy)
+            {
+                selectDesPopUp.SetActive(false);
+            }
+            mapStatus = Status.Waiting;
 			if (shapeManager.shapeObjList.Count != 0)
 			{
 				shapeManager.ClearShapes();
