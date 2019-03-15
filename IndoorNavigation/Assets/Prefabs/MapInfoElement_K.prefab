@@ -209,7 +209,7 @@ GameObject:
   - component: {fileID: 222432121713120712}
   - component: {fileID: 114936849133745424}
   m_Layer: 5
-  m_Name: MapIdLabel
+  m_Name: MapNameLabel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -232,7 +232,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 95, y: 43}
+  m_SizeDelta: {x: 500, y: 43}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &222432121713120712
 CanvasRenderer:
@@ -275,7 +275,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Map ID
+  m_Text: Map Name
 --- !u!1 &1556233652023038
 GameObject:
   m_ObjectHideFlags: 0
@@ -311,7 +311,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 193, y: 32}
+  m_SizeDelta: {x: 500, y: 32}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &222778833536014780
 CanvasRenderer:
