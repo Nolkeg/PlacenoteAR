@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class Rotating : MonoBehaviour
 {
-	
+	[SerializeField] Vector3 rotationAngle;
+	[SerializeField] float rotationSpeed;
+
 	void Update()
     {
-		transform.Rotate(new Vector3(0,0,-90*Time.deltaTime));
+		transform.Rotate(rotationAngle * Time.deltaTime * rotationSpeed);
     }
+
 }
