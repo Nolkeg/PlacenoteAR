@@ -7,6 +7,7 @@ public class DestinationTarget : MonoBehaviour
 	Vector3 rotate = new Vector3(0, 1, 0);
 	public GameObject destinationMesh;
 	public string DestinationName;
+	public int DestinationIndex;
 
 
 	// Update is called once per frame

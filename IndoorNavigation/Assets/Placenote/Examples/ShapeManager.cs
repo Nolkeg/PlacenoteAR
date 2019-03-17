@@ -21,6 +21,7 @@ public class ShapeInfo
     public int shapeType;
     public int colorType;
 	public string name;
+	public int infoIndex;
 }
 
 

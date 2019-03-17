@@ -8,10 +8,12 @@ public class InputManager : MonoBehaviour
 {
 	public TMP_InputField MapNamePopUp;
 	public TMP_InputField DestinationNamePopUp;
+	public TMP_InputField InfoIndex;
 
 
 	[HideInInspector] public string MapName;
 	[HideInInspector] public string DestinationName;
+	[HideInInspector] public int index;
 
 	CreateMapSample createMapScript;
 	DestinationTarget currentDestination;
@@ -24,21 +26,47 @@ public class InputManager : MonoBehaviour
 
 	public void OnApplyMapNameClicked()
 	{
-		MapName = MapNamePopUp.text;
-		createMapScript.haveMapName = true;
-		MapNamePopUp.gameObject.SetActive(false);
+		if(MapNamePopUp.text == "")
+		{
+			createMapScript.haveMapName = false;
+			print("don't have map name yet!");
+			return;
+		}
+		else
+		{
+			MapName = MapNamePopUp.text;
+			print("Map Name = " + MapName);
+			createMapScript.haveMapName = true;
+			MapNamePopUp.gameObject.SetActive(false);
+		}
 	}
 
 	public void OnApplyDestinationNameClicked()
 	{
-		DestinationName = DestinationNamePopUp.text;
-		shapemanager.canAddDestination = true;
-		DestinationNamePopUp.gameObject.SetActive(false);
+		if(DestinationNamePopUp.text == "" || InfoIndex.text == "")
+		{
+			shapemanager.canAddDestination = false;
+		}
+		else
+		{
+			DestinationName = DestinationNamePopUp.text;
+			index = int.Parse(InfoIndex.text);
+			shapemanager.canAddDestination = true;
+			DestinationNamePopUp.gameObject.SetActive(false);
+		}
 	}
 	
 	public void OnCancleDestinationNameClicked()
 	{
 		DestinationNamePopUp.gameObject.SetActive(false);
 		shapemanager.CanCelAddDestination();
+	}
+
+	public void ResetNameAndIndex()
+	{
+		DestinationName = null;
+		index = 0;
+		DestinationNamePopUp.text = null;
+		InfoIndex.text = null;
 	}
 }

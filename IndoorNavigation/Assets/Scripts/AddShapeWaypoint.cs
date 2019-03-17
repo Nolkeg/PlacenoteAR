@@ -53,6 +53,7 @@ public class AddShapeWaypoint : MonoBehaviour
 		shapeInfo.qw = shapeRotation.w;
 		shapeInfo.shapeType = typeIndex.GetHashCode();
 		shapeInfo.name = name;
+		shapeInfo.infoIndex = inputmanager.index;
 		shapeInfoList.Add(shapeInfo);
 		Debug.Log(shapeInfo.name);
 		GameObject shape = ShapeFromInfo(shapeInfo, false); // instantiate shape from info
@@ -65,7 +66,7 @@ public class AddShapeWaypoint : MonoBehaviour
 		}
 		
 		shapeObjList.Add(shape);
-
+		inputmanager.ResetNameAndIndex();
 	}
 
 	void Update()
@@ -73,7 +74,7 @@ public class AddShapeWaypoint : MonoBehaviour
 		if (Input.GetKey(KeyCode.P)||shouldSpawnWaypoint)
 		{
 			Transform player = navController.transform;
-			Collider[] hitColliders = Physics.OverlapSphere(player.position, 1.3f);
+			Collider[] hitColliders = Physics.OverlapSphere(player.position, 1.1f);
 			int i = 0;
 			while (i < hitColliders.Length)
 			{
@@ -148,16 +149,20 @@ public class AddShapeWaypoint : MonoBehaviour
 		{
 			if (shape.GetComponent<DestinationTarget>() != null)
 			{
-				shape.GetComponent<DestinationTarget>().DestinationName = info.name;
+				var temptShape = shape.GetComponent<DestinationTarget>();
+				temptShape.DestinationName = info.name;
+				temptShape.DestinationIndex = info.infoIndex;
 				shape.name = info.name;
-				shape.GetComponent<DestinationTarget>().Activate(true);
+				temptShape.Activate(true);
 			}
 		}
 		else if(CreateMapSample.mapStatus == CreateMapSample.Status.Running)
 		{
 			if (shape.GetComponent<DestinationTarget>() != null)
 			{
-				shape.GetComponent<DestinationTarget>().DestinationName = info.name;
+				var temptShape = shape.GetComponent<DestinationTarget>();
+				temptShape.DestinationName = info.name;
+				temptShape.DestinationIndex = info.infoIndex;
 				shape.name = info.name;
 				shape.GetComponent<DestinationTarget>().Activate(false);
 			}

@@ -114,7 +114,7 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 
 		mMapListPanel.SetActive(true);
 		mInitButtonPanel.SetActive(false);
-		mRadiusSlider.gameObject.SetActive(true);
+		//mRadiusSlider.gameObject.SetActive(true);
 		LibPlacenote.Instance.ListMaps((mapList) => {
 			// render the map list!
 			foreach (LibPlacenote.MapInfo mapInfoItem in mapList)
@@ -258,9 +258,10 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 		bool useLocation = Input.location.status == LocationServiceStatus.Running;
 		LocationInfo locationInfo = Input.location.lastData;
 		MapnameInputPopUp.SetActive(true);
-		statusText.text = "Wait for name input....";
+		statusText.text = "Wait for map name input....";
 
 		yield return new WaitUntil(() => haveMapName == true);
+
 		statusText.text = "Saving...";
 		LibPlacenote.Instance.SaveMap(
 			(mapId) => {
