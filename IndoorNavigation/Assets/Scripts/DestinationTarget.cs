@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DestinationTarget : MonoBehaviour
 {
-	Vector3 rotate = new Vector3(0, 1, 0);
+	Vector3 rotate = new Vector3(0, 0.5f, 0);
 	public GameObject destinationMesh;
 	public string DestinationName;
 	public int DestinationIndex;

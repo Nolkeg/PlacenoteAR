@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1802100430730755235}
   - component: {fileID: 3645921457225797516}
   m_Layer: 5
-  m_Name: MeetingRoom
+  m_Name: 600_MeetingRoom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -36,7 +36,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 580, y: 180}
+  m_SizeDelta: {x: 520, y: 180}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3625860147591546690
 CanvasRenderer:
