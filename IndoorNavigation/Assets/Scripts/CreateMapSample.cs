@@ -461,6 +461,14 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 		DropdownList.options.Clear();
 		shapeManager.ClearShapes();
 		navController.ReSetParameter();
+		StartCoroutine(UIcheck());
+	}
+	IEnumerator UIcheck()
+	{
+		yield return new WaitForSeconds(1);
+		scanPopup.SetActive(false);
+		selectDesPopUp.SetActive(false);
+		waitPopUp.SetActive(false);
 	}
 
 	
@@ -501,10 +509,7 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 		}
 		else if (currStatus == LibPlacenote.MappingStatus.WAITING)
 		{
-            if(selectDesPopUp.activeInHierarchy)
-            {
-                selectDesPopUp.SetActive(false);
-            }
+            
             mapStatus = Status.Waiting;
 			if (shapeManager.shapeObjList.Count != 0)
 			{
