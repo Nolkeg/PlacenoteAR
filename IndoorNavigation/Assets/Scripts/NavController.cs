@@ -14,7 +14,6 @@ public class NavController : MonoBehaviour {
     private int currNodeIndex = 0;
     private float maxDistance = 1.5f;
 	[SerializeField] NodeFinder nodeFinder;
-	
 	public void ReSetParameter()
 	{
 		foreach(Node node in allNodes)
@@ -153,8 +152,13 @@ public class NavController : MonoBehaviour {
 			if(tempIndex > currNodeIndex) //check whether the object we hit is next in path
 			{
 				currNodeIndex = tempIndex; //if so, set the current index to the next in path
+
+				if(currNodeIndex == path.Count - 1) //if hit destination activate it
+				{
+					path[currNodeIndex].Activate(true);
+				}
 			}
-			else if(tempIndex == currNodeIndex)
+			else if(tempIndex == currNodeIndex) // hit destination
 			{
 				currNodeIndex = tempIndex;
 				path[currNodeIndex].Activate(true);
@@ -167,6 +171,7 @@ public class NavController : MonoBehaviour {
             if (currNodeIndex < path.Count - 1) { //if the index we get is not the destination
                 path[currNodeIndex + 1].Activate(true); //activate the next in list node;
 			}
+			
         }
     }
 

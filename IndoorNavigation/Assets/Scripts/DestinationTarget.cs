@@ -9,6 +9,13 @@ public class DestinationTarget : MonoBehaviour
 	public string DestinationName;
 	public int DestinationIndex;
 
+	public bool isActive
+	{
+		get
+		{
+			return destinationMesh.activeInHierarchy;
+		}
+	}
 
 	// Update is called once per frame
 	void Update()

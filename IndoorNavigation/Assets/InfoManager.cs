@@ -4,29 +4,36 @@ using UnityEngine;
 
 public class InfoManager : MonoBehaviour
 {
+	CreateMapSample mapManager;
 	[SerializeField] GameObject InfoUI;
 	[SerializeField] List<DestinationInfo> infoList = new List<DestinationInfo>();
 	DestinationInfo infoPanel;
 	RaycastHit hit;
 
+
+	private void Start()
+	{
+		mapManager = GetComponent<CreateMapSample>();
+	}
 	private void Update()
 	{
 		if (infoPanel != null)
 			return;
-//#if !UNITY_EDITOR
+#if UNITY_EDITOR
 		if(Input.GetMouseButtonDown(0))
 		{
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
 			if (Physics.Raycast(ray, out hit))
 			{
-				if (hit.transform.GetComponent<DestinationTarget>() != null)
+				if (hit.transform.GetComponent<DestinationTarget>() != null &&
+					hit.transform.GetComponent<DestinationTarget>().isActive)
 				{
 					SpawnInfo(hit.transform.GetComponent<DestinationTarget>().DestinationIndex);
 				}
 			}
 		}	
-//#endif
+#endif
 		for (var i = 0; i < Input.touchCount; ++i)
 		{
 			if (Input.GetTouch(i).phase == TouchPhase.Began)
@@ -37,7 +44,8 @@ public class InfoManager : MonoBehaviour
 
 				if (Physics.Raycast(ray, out hit))
 				{
-					if(hit.transform.GetComponent<DestinationTarget>()!=null)
+					if(hit.transform.GetComponent<DestinationTarget>()!=null &&
+					   hit.transform.GetComponent<DestinationTarget>().isActive)
 					{
 						SpawnInfo(hit.transform.GetComponent<DestinationTarget>().DestinationIndex);
 					}
