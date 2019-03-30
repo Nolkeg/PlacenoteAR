@@ -29,6 +29,7 @@ public class AddShapeWaypoint : MonoBehaviour
 		canAddDestination = false;
 		shouldSpawnWaypoint = false;
 	}
+
 	int NodeCount = 0;
 	public bool shapesLoaded = false;
 	public bool nodeLoaded = false;
