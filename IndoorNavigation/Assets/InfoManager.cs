@@ -1,13 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using DG.Tweening;
 
 public class InfoManager : MonoBehaviour
 {
 	CreateMapSample mapManager;
-	[SerializeField] GameObject InfoUI;
 	[SerializeField] List<DestinationInfo> infoList = new List<DestinationInfo>();
-	DestinationInfo infoPanel;
+	[SerializeField] RectTransform closeUI;
+	DestinationInfo currentInfo;
 	RaycastHit hit;
 
 
@@ -17,8 +19,9 @@ public class InfoManager : MonoBehaviour
 	}
 	private void Update()
 	{
-		if (infoPanel != null)
+		if (currentInfo != null)
 			return;
+
 #if UNITY_EDITOR
 		if(Input.GetMouseButtonDown(0))
 		{
@@ -60,19 +63,36 @@ public class InfoManager : MonoBehaviour
 		foreach(DestinationInfo info in infoList)
 		{
 			if (info.InFoIndex != index)
-				continue;
-			InfoUI.SetActive(true);
-			infoPanel = Instantiate(info);
-			infoPanel.transform.SetParent(InfoUI.transform);
-			var positionn = infoPanel.GetComponent<RectTransform>();
-			positionn.anchoredPosition = Vector2.zero;
+				continue; // if index not matching skip loop
+
+			//index match pop up info
+			info.gameObject.transform.DOScale(new Vector3(1,1,1), 0.25f);
+			StartCoroutine(delayActivate());
+			//set refference to the popupInfo
+			currentInfo = info;
 		}
+	}
+
+	IEnumerator delayActivate()
+	{
+		yield return new WaitForSeconds(0.25f);
+		closeUI.gameObject.SetActive(true);
 	}
 
 	public void Close()
 	{
-		Destroy(infoPanel.gameObject);
-		infoPanel = null;
-		InfoUI.SetActive(false);
+		currentInfo.gameObject.transform.DOScale(0, 0.25f);
+		closeUI.gameObject.SetActive(false);
+		currentInfo = null;
 	}
+
+	/*public void ForceCloseAllInfo()
+	{
+		foreach(var x in infoList)
+		{
+			x.gameObject.transform.DOScale(Vector3.zero, 0.25f);
+		}
+		closeUI.gameObject.SetActive(false);
+		currentInfo = null;
+	}*/
 }
