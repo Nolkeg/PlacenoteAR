@@ -55,15 +55,19 @@ public class AddShapeWaypoint : MonoBehaviour
 		shapeInfo.shapeType = typeIndex.GetHashCode();
 		shapeInfo.name = name;
 		shapeInfo.infoIndex = inputmanager.index;
+		shapeInfo.linkMapID = inputmanager.LinkID;
 		shapeInfoList.Add(shapeInfo);
 		Debug.Log(shapeInfo.name);
 		GameObject shape = ShapeFromInfo(shapeInfo, false); // instantiate shape from info
 		NodeCount++;
-		if (shape.GetComponent<DestinationTarget>() != null)
+
+		DestinationTarget temp = shape.GetComponent<DestinationTarget>();
+		if (temp != null)
 		{
 			NodeCount--;
-			shape.GetComponent<DestinationTarget>().Activate(true);
-			shape.GetComponent<DestinationTarget>().DestinationName = name;
+			/*temp.Activate(true);
+			temp.DestinationName = name;
+			temp.linkMapID = inputmanager.LinkID;*/
 		}
 		
 		shapeObjList.Add(shape);
@@ -153,6 +157,7 @@ public class AddShapeWaypoint : MonoBehaviour
 				var temptShape = shape.GetComponent<DestinationTarget>();
 				temptShape.DestinationName = info.name;
 				temptShape.DestinationIndex = info.infoIndex;
+				temptShape.linkMapID = info.linkMapID;
 				shape.name = info.name;
 				temptShape.Activate(true);
 			}
@@ -164,6 +169,7 @@ public class AddShapeWaypoint : MonoBehaviour
 				var temptShape = shape.GetComponent<DestinationTarget>();
 				temptShape.DestinationName = info.name;
 				temptShape.DestinationIndex = info.infoIndex;
+				temptShape.linkMapID = info.linkMapID;
 				shape.name = info.name;
 				shape.GetComponent<DestinationTarget>().Activate(false);
 			}

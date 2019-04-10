@@ -8,6 +8,12 @@ public class DestinationTarget : MonoBehaviour
 	public GameObject destinationMesh;
 	public string DestinationName;
 	public int DestinationIndex;
+	public string linkMapID;
+	[SerializeField] MapNameFromID loadMapPopUp;
+	private void Start()
+	{
+		loadMapPopUp = FindObjectOfType<MapNameFromID>();
+	}
 
 	public bool isActive
 	{
@@ -27,5 +33,22 @@ public class DestinationTarget : MonoBehaviour
 	{
 		destinationMesh.SetActive(active);
 	}
-	
+
+	private void OnTriggerEnter(Collider other)
+	{
+		if(!destinationMesh.activeInHierarchy)
+		{
+			return;
+		}
+
+		if(loadMapPopUp == null)
+		{
+			loadMapPopUp = FindObjectOfType<MapNameFromID>();
+		}
+
+		if (other.CompareTag("MainCamera") && linkMapID != null && loadMapPopUp!= null)
+		{
+			loadMapPopUp.ChangeUI(linkMapID);
+		}
+	}
 }

@@ -174,7 +174,7 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 		});
 	}
 
-	void OnMapSelected(LibPlacenote.MapInfo mapInfo)
+	public void OnMapSelected(LibPlacenote.MapInfo mapInfo)
 	{
 		mSelectedMapInfo = mapInfo;
 		mMapSelectedPanel.SetActive(true);
@@ -358,7 +358,7 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 		}
 	}
 
-	public void OnDropDownSelected()
+	public void OnDropDownSelected() //a method to set the selected destination as current destination
 	{
 		if(destinationList.Count ==0)
 		{
@@ -471,7 +471,6 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 		waitPopUp.SetActive(false);
 	}
 
-	
 
 	// Runs when a new pose is received from Placenote.    
 	public void OnPose(Matrix4x4 outputPose, Matrix4x4 arkitPose) { }
@@ -519,7 +518,7 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 
 	}
 
-	IEnumerator DestinationToDropDown()
+	IEnumerator DestinationToDropDown() //A method to load all destination in map to dropdown list
 	{
 		yield return new WaitUntil(() => shapeManager.shapesLoaded == true);
 		List<string> desname = new List<string>();

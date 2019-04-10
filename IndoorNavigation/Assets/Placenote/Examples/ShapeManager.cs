@@ -22,6 +22,7 @@ public class ShapeInfo
     public int colorType;
 	public string name;
 	public int infoIndex;
+	public string linkMapID;
 }
 
 

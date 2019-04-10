@@ -9,10 +9,12 @@ public class InputManager : MonoBehaviour
 	public TMP_InputField MapNamePopUp;
 	public TMP_InputField DestinationNamePopUp;
 	public TMP_InputField InfoIndex;
+	public LoadMapList DropdownLink;
 
 
 	[HideInInspector] public string MapName;
 	[HideInInspector] public string DestinationName;
+	[HideInInspector] public string LinkID;
 	[HideInInspector] public int index;
 
 	CreateMapSample createMapScript;
@@ -43,6 +45,7 @@ public class InputManager : MonoBehaviour
 
 	public void OnApplyDestinationNameClicked()
 	{
+		
 		if(DestinationNamePopUp.text == "" || InfoIndex.text == "")
 		{
 			shapemanager.canAddDestination = false;
@@ -51,6 +54,7 @@ public class InputManager : MonoBehaviour
 		{
 			DestinationName = DestinationNamePopUp.text;
 			index = int.Parse(InfoIndex.text);
+			LinkID = DropdownLink.linkID;
 			shapemanager.canAddDestination = true;
 			DestinationNamePopUp.gameObject.SetActive(false);
 		}
@@ -59,6 +63,7 @@ public class InputManager : MonoBehaviour
 	public void OnCancleDestinationNameClicked()
 	{
 		DestinationNamePopUp.gameObject.SetActive(false);
+		ResetNameAndIndex();
 		shapemanager.CanCelAddDestination();
 	}
 
@@ -68,5 +73,7 @@ public class InputManager : MonoBehaviour
 		index = 0;
 		DestinationNamePopUp.text = null;
 		InfoIndex.text = null;
+		DropdownLink.linkID = null;
+		LinkID = null;
 	}
 }
