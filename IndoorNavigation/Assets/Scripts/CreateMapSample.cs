@@ -31,7 +31,9 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 	[SerializeField] GameObject waitPopUp;
 	[SerializeField] GameObject scanPopup;
 	[SerializeField] GameObject selectDesPopUp;
- 
+	[SerializeField] GameObject welcomeSign;
+	[SerializeField] RandomStarSpawner starSpawner;
+	GameObject sign;
 	private bool localizeFirstTime;
 	private InputManager inputManager;
 	public NavController navController;
@@ -65,6 +67,11 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 	public static Status mapStatus;
 
 	private LibPlacenote.MapMetadataSettable mCurrMapDetails;
+
+	public string ReturnMapName()
+	{
+		return mSelectedMapInfo != null ? mSelectedMapInfo.metadata.name : null;
+	}
 
 	void Start()
     {
@@ -425,7 +432,12 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 							});
 						Debug.Log("Started Debug Report");
 					}
-
+					Vector3 posOffSet = Vector3.left * 1f + Vector3.down * 2.5f + navController.transform.forward * 5;
+					Vector3 signPos = navController.transform.position + posOffSet;
+					sign = Instantiate(welcomeSign, signPos, Quaternion.identity);
+					sign.transform.LookAt(navController.transform.position);
+					sign.transform.rotation = Quaternion.Euler(0, 180+sign.transform.rotation.eulerAngles.y, 0);
+					starSpawner.StartSpawning();
 					statusText.text = "Loaded Map: " + mSelectedMapName;
 					waitPopUp.SetActive(false);
 					scanPopup.SetActive(true);
@@ -445,6 +457,7 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 
 	public void OnExitClick()
 	{
+		Destroy(sign);
 		localizeFirstTime = false;
 		mInitButtonPanel.SetActive(true);
 		mExitButton.SetActive(false);
@@ -453,6 +466,7 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 		scanPopup.SetActive(false);
 		selectDesPopUp.SetActive(false);
 		waitPopUp.SetActive(false);
+		starSpawner.StopSpawning();
 		LibPlacenote.Instance.StopSession();
 		FeaturesVisualizer.clearPointcloud();
 		destination = null;
