@@ -32,7 +32,7 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 	[SerializeField] GameObject scanPopup;
 	[SerializeField] GameObject selectDesPopUp;
 	[SerializeField] GameObject welcomeSign;
-	[SerializeField] RandomStarSpawner starSpawner;
+	//[SerializeField] RandomStarSpawner starSpawner;
 	GameObject sign;
 	private bool localizeFirstTime;
 	private InputManager inputManager;
@@ -437,9 +437,13 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 					sign = Instantiate(welcomeSign, signPos, Quaternion.identity);
 					sign.transform.LookAt(navController.transform.position);
 					sign.transform.rotation = Quaternion.Euler(0, 180+sign.transform.rotation.eulerAngles.y, 0);
+<<<<<<< HEAD
 #if !UNITY_EDITOR
 					starSpawner.StartSpawning();
 #endif
+=======
+					//starSpawner.StartSpawning();
+>>>>>>> 0c3544c270f91172dc2e4b78b87fdf31ec451fc7
 					statusText.text = "Loaded Map: " + mSelectedMapName;
 					waitPopUp.SetActive(false);
 					scanPopup.SetActive(true);
@@ -470,10 +474,16 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 		scanPopup.SetActive(false);
 		selectDesPopUp.SetActive(false);
 		waitPopUp.SetActive(false);
+<<<<<<< HEAD
 
 #if !UNITY_EDITOR
 		starSpawner.StopSpawning();
 #endif
+=======
+		//starSpawner.StopSpawning();
+		LibPlacenote.Instance.StopSession();
+		FeaturesVisualizer.clearPointcloud();
+>>>>>>> 0c3544c270f91172dc2e4b78b87fdf31ec451fc7
 		destination = null;
 		destinationList.Clear();
 		DropdownList.value = 0;

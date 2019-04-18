@@ -5,7 +5,6 @@ using DG.Tweening;
 
 public class RandomStarSpawner : MonoBehaviour
 { 
-
 	[SerializeField] GameObject[] stars;
 	[SerializeField] float spawnPerSecond = 1;
 
