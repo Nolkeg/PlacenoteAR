@@ -85,14 +85,5 @@ public class InfoManager : MonoBehaviour
 		closeUI.gameObject.SetActive(false);
 		currentInfo = null;
 	}
-
-	/*public void ForceCloseAllInfo()
-	{
-		foreach(var x in infoList)
-		{
-			x.gameObject.transform.DOScale(Vector3.zero, 0.25f);
-		}
-		closeUI.gameObject.SetActive(false);
-		currentInfo = null;
-	}*/
+	
 }

@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - waypoint
+  - LoadMapCollider
   layers:
   - Default
   - TransparentFX

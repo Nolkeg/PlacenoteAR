@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class NodeFinder : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class NodeFinder : MonoBehaviour
     void Start()
     {
 		StartCoroutine(LoopNodeFindingDelay());
+
     }
 
     
@@ -25,13 +27,13 @@ public class NodeFinder : MonoBehaviour
 
 		if(distanceLeft<distanceRight)
 		{
-			turnRightUI.SetActive(false);
-			turnLeftUI.SetActive(true);
+			turnLeftUI.transform.DOScale(1, 0.25f);
+			turnRightUI.transform.DOScale(0, 0.25f);
 		}
 		else if(distanceRight < distanceLeft)
 		{
-			turnRightUI.SetActive(true);
-			turnLeftUI.SetActive(false);
+			turnRightUI.transform.DOScale(1, 0.25f);
+			turnLeftUI.transform.DOScale(0, 0.25f);
 		}
 	}
 
@@ -39,8 +41,8 @@ public class NodeFinder : MonoBehaviour
 	{
 		StopCoroutine(LoopNodeFindingDelay());
 		currentNodeRen = null;
-		turnLeftUI.SetActive(false);
-		turnRightUI.SetActive(false);
+		turnLeftUI.transform.DOScale(0, 0.25f);
+		turnRightUI.transform.DOScale(0, 0.25f);
 		distanceLeft = 0;
 		distanceRight = 0;
 	}
@@ -62,8 +64,8 @@ public class NodeFinder : MonoBehaviour
 			}
 			else //if node is on screen turn off the UI
 			{
-				turnLeftUI.SetActive(false);
-				turnRightUI.SetActive(false);
+				turnLeftUI.transform.DOScale(0, 0.25f);
+				turnRightUI.transform.DOScale(0, 0.25f);
 				distanceLeft = 0;
 				distanceRight = 0;
 			}

@@ -121,12 +121,11 @@ public class NavController : MonoBehaviour {
             }
             //activate first node and rotate it to the next node
             path[0].Activate(true);
-			nodeFinder.currentNodeRen = path[0].meshRenderer;
+			currNodeIndex = 0;
+			nodeFinder.currentNodeRen = path[currNodeIndex].meshRenderer;
 			_initializedComplete = true; // a flag to check if all node is load before we can move
 
 			StartCoroutine(DelayPopUp(path));
-
-			StartCoroutine(DelayAssign());
 		}
     }
 
@@ -137,6 +136,8 @@ public class NavController : MonoBehaviour {
 			if (Vector3.Distance(node.transform.position, this.transform.position) < 6.5f) //activate all node in this radius
 			{
 				node.Activate(true);
+				if(currNodeIndex < path.IndexOf(node))
+					currNodeIndex = path.IndexOf(node);
 				nodeFinder.currentNodeRen = node.meshRenderer;
 				yield return new WaitForSecondsRealtime(0.5f);
 			}
@@ -156,12 +157,14 @@ public class NavController : MonoBehaviour {
 				if(currNodeIndex == path.Count - 1) //if hit destination activate it
 				{
 					path[currNodeIndex].Activate(true);
+					nodeFinder.currentNodeRen = path[currNodeIndex].meshRenderer;
 				}
 			}
 			else if(tempIndex == currNodeIndex) // hit destination
 			{
 				currNodeIndex = tempIndex;
 				path[currNodeIndex].Activate(true);
+				nodeFinder.currentNodeRen = path[currNodeIndex].meshRenderer;
 			}
 			else
 			{
@@ -170,21 +173,11 @@ public class NavController : MonoBehaviour {
 
             if (currNodeIndex < path.Count - 1) { //if the index we get is not the destination
                 path[currNodeIndex + 1].Activate(true); //activate the next in list node;
+				nodeFinder.currentNodeRen = path[currNodeIndex + 1].meshRenderer;
 			}
 			
         }
     }
-
-	IEnumerator DelayAssign()
-	{
-		while(true)
-		{
-			yield return new WaitForSecondsRealtime(0.5f);
-			nodeFinder.currentNodeRen = path[currNodeIndex].meshRenderer;
-		}
-		
-	}
-	
 	
 
 

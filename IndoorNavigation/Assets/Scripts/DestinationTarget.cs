@@ -46,9 +46,14 @@ public class DestinationTarget : MonoBehaviour
 			loadMapPopUp = FindObjectOfType<MapNameFromID>();
 		}
 
-		if (other.CompareTag("MainCamera") && linkMapID != null && loadMapPopUp!= null)
+		if (other.CompareTag("LoadMapCollider") && linkMapID != null && loadMapPopUp != null)
 		{
 			loadMapPopUp.ChangeUI(linkMapID);
 		}
+	}
+
+	private void OnTriggerStay(Collider other)
+	{
+		
 	}
 }
