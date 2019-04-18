@@ -6,17 +6,12 @@ using DG.Tweening;
 
 public class InfoManager : MonoBehaviour
 {
-	CreateMapSample mapManager;
 	[SerializeField] List<DestinationInfo> infoList = new List<DestinationInfo>();
 	[SerializeField] RectTransform closeUI;
 	DestinationInfo currentInfo;
 	RaycastHit hit;
 
-
-	private void Start()
-	{
-		mapManager = GetComponent<CreateMapSample>();
-	}
+	
 	private void Update()
 	{
 		if (currentInfo != null)

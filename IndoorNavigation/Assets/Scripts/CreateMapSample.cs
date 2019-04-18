@@ -437,7 +437,9 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 					sign = Instantiate(welcomeSign, signPos, Quaternion.identity);
 					sign.transform.LookAt(navController.transform.position);
 					sign.transform.rotation = Quaternion.Euler(0, 180+sign.transform.rotation.eulerAngles.y, 0);
+#if !UNITY_EDITOR
 					starSpawner.StartSpawning();
+#endif
 					statusText.text = "Loaded Map: " + mSelectedMapName;
 					waitPopUp.SetActive(false);
 					scanPopup.SetActive(true);
@@ -457,6 +459,8 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 
 	public void OnExitClick()
 	{
+		LibPlacenote.Instance.StopSession();
+		FeaturesVisualizer.clearPointcloud();
 		Destroy(sign);
 		localizeFirstTime = false;
 		mInitButtonPanel.SetActive(true);
@@ -466,9 +470,10 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 		scanPopup.SetActive(false);
 		selectDesPopUp.SetActive(false);
 		waitPopUp.SetActive(false);
+
+#if !UNITY_EDITOR
 		starSpawner.StopSpawning();
-		LibPlacenote.Instance.StopSession();
-		FeaturesVisualizer.clearPointcloud();
+#endif
 		destination = null;
 		destinationList.Clear();
 		DropdownList.value = 0;
