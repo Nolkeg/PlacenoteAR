@@ -10,9 +10,11 @@ public class DestinationTarget : MonoBehaviour
 	public int DestinationIndex;
 	public string linkMapID;
 	[SerializeField] MapNameFromID loadMapPopUp;
+	CreateMapSample mapManager;
 	private void Start()
 	{
 		loadMapPopUp = FindObjectOfType<MapNameFromID>();
+		mapManager = FindObjectOfType<CreateMapSample>();
 	}
 
 	public bool isActive
@@ -36,7 +38,8 @@ public class DestinationTarget : MonoBehaviour
 
 	private void OnTriggerEnter(Collider other)
 	{
-		if(!destinationMesh.activeInHierarchy)
+
+		if(!destinationMesh.activeInHierarchy || !mapManager.IsInitialized)
 		{
 			return;
 		}
@@ -51,9 +54,5 @@ public class DestinationTarget : MonoBehaviour
 			loadMapPopUp.ChangeUI(linkMapID);
 		}
 	}
-
-	private void OnTriggerStay(Collider other)
-	{
-		
-	}
+	
 }

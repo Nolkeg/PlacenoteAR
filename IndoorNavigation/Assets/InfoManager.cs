@@ -8,13 +8,18 @@ public class InfoManager : MonoBehaviour
 {
 	[SerializeField] List<DestinationInfo> infoList = new List<DestinationInfo>();
 	[SerializeField] RectTransform closeUI;
+	CreateMapSample mapManager;
 	DestinationInfo currentInfo;
 	RaycastHit hit;
 
-	
+	private void Start()
+	{
+		mapManager = GetComponent<CreateMapSample>();
+	}
+
 	private void Update()
 	{
-		if (currentInfo != null)
+		if (currentInfo != null|| !mapManager.IsInitialized)
 			return;
 
 #if UNITY_EDITOR
@@ -76,6 +81,7 @@ public class InfoManager : MonoBehaviour
 
 	public void Close()
 	{
+		StopAllCoroutines();
 		currentInfo.gameObject.transform.DOScale(0, 0.25f);
 		closeUI.gameObject.SetActive(false);
 		currentInfo = null;

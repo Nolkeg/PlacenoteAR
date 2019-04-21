@@ -31,16 +31,26 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 	[SerializeField] GameObject waitPopUp;
 	[SerializeField] GameObject scanPopup;
 	[SerializeField] GameObject selectDesPopUp;
-	[SerializeField] GameObject welcomeSign;
-	//[SerializeField] RandomStarSpawner starSpawner;
-	GameObject sign;
+	
 	private bool localizeFirstTime;
 	private InputManager inputManager;
+	private InfoManager infoManager;
 	public NavController navController;
 	private UnityARSessionNativeInterface mSession;
 	private LibPlacenote.MapInfo mSelectedMapInfo;
 	private AddShapeWaypoint shapeManager;
 	public Node destination;
+
+	private bool initialized;
+
+	public bool IsInitialized
+	{
+		get
+		{
+			return initialized;
+		}
+	}
+
 	[SerializeField]List<DestinationTarget> destinationList = new List<DestinationTarget>();
 	private string mSelectedMapId
 	{
@@ -83,6 +93,7 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 		LibPlacenote.Instance.RegisterListener(this);
 		shapeManager = GetComponent<AddShapeWaypoint>();
 		inputManager = GetComponent<InputManager>();
+		infoManager = GetComponent<InfoManager>();
 	}
 
 	private void StartARKit()
@@ -409,7 +420,7 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 					mExitButton.SetActive(true);
 					DropdownList.gameObject.SetActive(true);
 					LoadDestinationList();
-
+					initialized = true;
 					LibPlacenote.Instance.StartSession();
 
 					if (mReportDebug)
@@ -434,12 +445,7 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 					}
 					Vector3 posOffSet = Vector3.left * 1f + Vector3.down * 2.5f + navController.transform.forward * 5;
 					Vector3 signPos = navController.transform.position + posOffSet;
-					sign = Instantiate(welcomeSign, signPos, Quaternion.identity);
-					sign.transform.LookAt(navController.transform.position);
-					sign.transform.rotation = Quaternion.Euler(0, 180+sign.transform.rotation.eulerAngles.y, 0);
-#if !UNITY_EDITOR
-					starSpawner.StartSpawning();
-#endif
+
 					statusText.text = "Loaded Map: " + mSelectedMapName;
 					waitPopUp.SetActive(false);
 					scanPopup.SetActive(true);
@@ -461,7 +467,7 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 	{
 		LibPlacenote.Instance.StopSession();
 		FeaturesVisualizer.clearPointcloud();
-		Destroy(sign);
+		initialized = false;
 		localizeFirstTime = false;
 		mInitButtonPanel.SetActive(true);
 		mExitButton.SetActive(false);
@@ -470,10 +476,7 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 		scanPopup.SetActive(false);
 		selectDesPopUp.SetActive(false);
 		waitPopUp.SetActive(false);
-#if !UNITY_EDITOR
-		starSpawner.StopSpawning();
-#endif
-
+		infoManager.Close();
 		LibPlacenote.Instance.StopSession();
 		FeaturesVisualizer.clearPointcloud();
 		destination = null;
