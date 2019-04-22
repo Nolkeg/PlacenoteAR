@@ -6,6 +6,7 @@ TagManager:
   tags:
   - waypoint
   - LoadMapCollider
+  - StarCollider
   layers:
   - Default
   - TransparentFX

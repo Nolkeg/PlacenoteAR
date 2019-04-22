@@ -4315,6 +4315,7 @@ MonoBehaviour:
   - {fileID: 1417247514451880, guid: 756520d3983b446779ee0b9bbd119c15, type: 3}
   - {fileID: 1160887633394466, guid: 63ccd2cdc6bdde54d9279a0ec98a3edb, type: 3}
   - {fileID: 1078755997285888, guid: 635fbf0e54865264ca0f74ed10385f56, type: 3}
+  - {fileID: 2013136951235116071, guid: 017b8e31460168c4eb65555c1e0974ef, type: 3}
   shapeInfoList: []
   shapeObjList: []
   NodeObjList: []
@@ -4340,6 +4341,7 @@ MonoBehaviour:
   mSimulatorAddShapeButton: {fileID: 3094176171079862847}
   mMapListPanel: {fileID: 3094176169001789892}
   mExitButton: {fileID: 3094176170271014234}
+  mActivateDesButton: {fileID: 0}
   mListElement: {fileID: 1170995837258984, guid: a3ef81b9c1147467396e3a086b211961,
     type: 3}
   mListContentParent: {fileID: 3094176169328512048}

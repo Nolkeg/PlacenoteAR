@@ -42,12 +42,8 @@ public class AddShapeWaypoint : MonoBehaviour
 	// All shape management functions (add shapes, save shapes to metadata etc.
 	//-------------------------------------------------
 
-	public void AddShape(Vector3 shapePosition, Quaternion shapeRotation, bool isDestination, string name)
+	public void AddShape(Vector3 shapePosition, Quaternion shapeRotation, int shapeType, string name)
 	{
-		int typeIndex = 0;//sphere
-		if (isDestination)
-			typeIndex = 1;//diamond
-		Debug.Log(typeIndex);
 
 		ShapeInfo shapeInfo = new ShapeInfo();
 		shapeInfo.px = shapePosition.x;
@@ -57,7 +53,7 @@ public class AddShapeWaypoint : MonoBehaviour
 		shapeInfo.qy = shapeRotation.y;
 		shapeInfo.qz = shapeRotation.z;
 		shapeInfo.qw = shapeRotation.w;
-		shapeInfo.shapeType = typeIndex.GetHashCode();
+		shapeInfo.shapeType = shapeType.GetHashCode();
 		shapeInfo.name = name;
 		shapeInfo.infoIndex = inputmanager.index;
 		shapeInfo.linkMapID = inputmanager.LinkID;
@@ -70,9 +66,6 @@ public class AddShapeWaypoint : MonoBehaviour
 		if (temp != null)
 		{
 			NodeCount--;
-			/*temp.Activate(true);
-			temp.DestinationName = name;
-			temp.linkMapID = inputmanager.LinkID;*/
 		}
 		
 		shapeObjList.Add(shape);
@@ -81,6 +74,9 @@ public class AddShapeWaypoint : MonoBehaviour
 
 	void Update()
 	{
+		if (!mapManager.IsMapping) // check to see if user is mapping;
+			return;
+
 		if (Input.GetKey(KeyCode.P)||shouldSpawnWaypoint)
 		{
 			Transform player = navController.transform;
@@ -96,7 +92,56 @@ public class AddShapeWaypoint : MonoBehaviour
 			}
 			Vector3 pos = player.position;
 			pos.y -= 1f;
-			AddShape(pos, Quaternion.Euler(Vector3.zero), false, null);
+			AddShape(pos, Quaternion.Euler(Vector3.zero), 0, null);
+		}
+
+		//test method to see star behaviour
+		/*if(Input.GetKeyDown(KeyCode.K))
+		{
+			Transform player = navController.transform;
+			Vector3 pos = player.position;
+			pos.y -= 1f;
+			AddShape(pos, Quaternion.Euler(Vector3.zero), 3, null);
+		}*/
+
+
+		if (Input.touchCount > 0)
+		{
+			var touch = Input.GetTouch(0);
+			if (touch.phase == TouchPhase.Began)
+			{
+				if (EventSystem.current.currentSelectedGameObject == null)
+				{
+
+					Debug.Log("Not touching a UI button. Moving on.");
+
+					// add new shape
+					var screenPosition = Camera.main.ScreenToViewportPoint(touch.position);
+					ARPoint point = new ARPoint
+					{
+						x = screenPosition.x,
+						y = screenPosition.y
+					};
+
+					// prioritize reults types
+					ARHitTestResultType[] resultTypes = {
+                        //ARHitTestResultType.ARHitTestResultTypeExistingPlaneUsingExtent,
+                        //ARHitTestResultType.ARHitTestResultTypeExistingPlane,
+                        //ARHitTestResultType.ARHitTestResultTypeEstimatedHorizontalPlane,
+                        //ARHitTestResultType.ARHitTestResultTypeEstimatedVerticalPlane,
+                        ARHitTestResultType.ARHitTestResultTypeFeaturePoint
+					};
+
+					foreach (ARHitTestResultType resultType in resultTypes)
+					{
+						if (HitTestWithResultType(point, resultType))
+						{
+							Debug.Log("Found a hit test result");
+							return;
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -127,7 +172,7 @@ public class AddShapeWaypoint : MonoBehaviour
 	{
 		yield return new WaitUntil(() => canAddDestination == true);
 		Vector3 pos = Camera.main.transform.position;
-		AddShape(pos, Quaternion.identity, true, inputmanager.DestinationName);
+		AddShape(pos, Quaternion.identity, 1, inputmanager.DestinationName);
 		canAddDestination = false;
 	}
 
@@ -136,7 +181,7 @@ public class AddShapeWaypoint : MonoBehaviour
 	{
 		GameObject shape;
 		Vector3 position = new Vector3(info.px, info.py, info.pz);
-		//if loading map, change waypoint to arrow
+		//if load map, change waypoint to arrow
 		if (pathFinding && info.shapeType == 0)
 		{
 			shape = Instantiate(ShapePrefabs[2]);
@@ -145,6 +190,7 @@ public class AddShapeWaypoint : MonoBehaviour
 		{
 			shape = Instantiate(ShapePrefabs[info.shapeType]);
 		}
+
 		if (shape.GetComponent<Node>() != null)
 		{
 			shape.GetComponent<Node>().pos = position; // set the node vector3 to the metadata position so it could find neighbour
@@ -299,9 +345,9 @@ public class AddShapeWaypoint : MonoBehaviour
 			loadAllShape = true;
 			foreach (var des in destinationList)
 			{
-				//des.transform.localScale = Vector3.zero;
+				if (des.transform == mapManager.destination.transform)
+					continue;
 				des.Activate(true);
-				//des.transform.DOScale(1, 0.25f);
 			}
 		}
 		else if (loadAllShape)
@@ -309,10 +355,42 @@ public class AddShapeWaypoint : MonoBehaviour
 			loadAllShape = false;
 			foreach (var des in destinationList)
 			{
-				//des.transform.DOScale(0, 0.25f);
+				if (des.transform == mapManager.destination.transform)
+					continue;
 				des.Activate(false);
 			}
 			
 		}
+	}
+
+	bool HitTestWithResultType(ARPoint point, ARHitTestResultType resultTypes)
+	{
+		List<ARHitTestResult> hitResults = UnityARSessionNativeInterface.GetARSessionNativeInterface().HitTest(point, resultTypes);
+
+		if (hitResults.Count > 0)
+		{
+			foreach (var hitResult in hitResults)
+			{
+
+				Debug.Log("Got hit!");
+
+				Vector3 position = UnityARMatrixOps.GetPosition(hitResult.worldTransform);
+				Quaternion rotation = UnityARMatrixOps.GetRotation(hitResult.worldTransform);
+
+				//Transform to placenote frame of reference (planes are detected in ARKit frame of reference)
+				Matrix4x4 worldTransform = Matrix4x4.TRS(position, rotation, Vector3.one);
+				Matrix4x4? placenoteTransform = LibPlacenote.Instance.ProcessPose(worldTransform);
+
+				Vector3 hitPosition = PNUtility.MatrixOps.GetPosition(placenoteTransform.Value);
+				Quaternion hitRotation = PNUtility.MatrixOps.GetRotation(placenoteTransform.Value);
+
+				// add star
+				AddShape(hitPosition, hitRotation,3, "Star" );
+
+
+				return true;
+			}
+		}
+		return false;
 	}
 }

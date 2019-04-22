@@ -43,12 +43,20 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 	public Node destination;
 
 	private bool initialized;
-
 	public bool IsInitialized
 	{
 		get
 		{
 			return initialized;
+		}
+	}
+
+	private bool mapping;
+	public bool IsMapping
+	{
+		get
+		{
+			return mapping;
 		}
 	}
 
@@ -249,6 +257,7 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 		}
 		mInitButtonPanel.SetActive(false);
 		mMappingButtonPanel.SetActive(true);
+		mapping = true;
 
 		LibPlacenote.Instance.StartSession();
 		if (mReportDebug)
@@ -258,6 +267,7 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 					if (completed)
 					{
 						statusText.text = "Dataset Upload Complete";
+						
 					}
 					else if (faulted)
 					{
@@ -275,6 +285,7 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 	IEnumerator SaveMap()
 	{
 		bool useLocation = Input.location.status == LocationServiceStatus.Running;
+		mapping = false;
 		LocationInfo locationInfo = Input.location.lastData;
 		MapnameInputPopUp.SetActive(true);
 		statusText.text = "Wait for map name input....";
@@ -470,6 +481,7 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 		LibPlacenote.Instance.StopSession();
 		FeaturesVisualizer.clearPointcloud();
 		initialized = false;
+		mapping = false;
 		localizeFirstTime = false;
 		mInitButtonPanel.SetActive(true);
 		mExitButton.SetActive(false);
