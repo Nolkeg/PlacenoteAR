@@ -477,14 +477,14 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 		selectDesPopUp.SetActive(false);
 		waitPopUp.SetActive(false);
 		infoManager.Close();
-		LibPlacenote.Instance.StopSession();
-		FeaturesVisualizer.clearPointcloud();
 		destination = null;
 		destinationList.Clear();
 		DropdownList.value = 0;
 		DropdownList.options.Clear();
+		DropdownList.RefreshShownValue();
 		shapeManager.ClearShapes();
 		navController.ReSetParameter();
+		StopAllCoroutines();
 		StartCoroutine(UIcheck());
 	}
 	IEnumerator UIcheck()

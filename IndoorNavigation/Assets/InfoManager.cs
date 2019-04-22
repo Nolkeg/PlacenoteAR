@@ -15,6 +15,7 @@ public class InfoManager : MonoBehaviour
 	private void Start()
 	{
 		mapManager = GetComponent<CreateMapSample>();
+		closeUI.DOScale(0, 0);
 	}
 
 	private void Update()
@@ -64,8 +65,7 @@ public class InfoManager : MonoBehaviour
 		{
 			if (info.InFoIndex != index)
 				continue; // if index not matching skip loop
-
-			//index match pop up info
+			
 			info.gameObject.transform.DOScale(new Vector3(1,1,1), 0.25f);
 			StartCoroutine(delayActivate());
 			//set refference to the popupInfo
@@ -76,15 +76,22 @@ public class InfoManager : MonoBehaviour
 	IEnumerator delayActivate()
 	{
 		yield return new WaitForSeconds(0.25f);
-		closeUI.gameObject.SetActive(true);
+		closeUI.DOScale(1, 0.05f);
 	}
 
 	public void Close()
 	{
-		StopAllCoroutines();
-		currentInfo.gameObject.transform.DOScale(0, 0.25f);
-		closeUI.gameObject.SetActive(false);
-		currentInfo = null;
+		if(currentInfo == null)
+		{
+			closeUI.DOScale(0, 0.05f);
+		}
+		else if(currentInfo != null)
+		{
+			currentInfo.gameObject.transform.DOScale(0, 0.25f);
+			closeUI.DOScale(0, 0.05f);
+			currentInfo = null;
+		}
+		
 	}
 	
 }
