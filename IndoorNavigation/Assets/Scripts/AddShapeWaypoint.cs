@@ -6,6 +6,7 @@ using UnityEngine.XR.iOS;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using UnityEngine.SceneManagement;
+using DG.Tweening;
 
 public class AddShapeWaypoint : MonoBehaviour
 {
@@ -16,16 +17,20 @@ public class AddShapeWaypoint : MonoBehaviour
 	[HideInInspector]
 	public List<GameObject> shapeObjList = new List<GameObject>();
 	public List<GameObject> NodeObjList = new List<GameObject>();
+	public List<DestinationTarget> destinationList = new List<DestinationTarget>();
 	InputManager inputmanager;
 	private GameObject lastShape;
 	string currentDesName;
 	public bool canAddDestination;
 	bool shouldSpawnWaypoint;
+	bool loadAllShape = false;
 	IEnumerator destinationCouroutine = null;
+	CreateMapSample mapManager;
 
 	private void Start()
 	{
 		inputmanager = GetComponent<InputManager>();
+		mapManager = GetComponent<CreateMapSample>();
 		canAddDestination = false;
 		shouldSpawnWaypoint = false;
 	}
@@ -159,6 +164,7 @@ public class AddShapeWaypoint : MonoBehaviour
 				temptShape.DestinationIndex = info.infoIndex;
 				temptShape.linkMapID = info.linkMapID;
 				shape.name = info.name;
+				destinationList.Add(temptShape);
 				temptShape.Activate(true);
 			}
 		}
@@ -171,6 +177,7 @@ public class AddShapeWaypoint : MonoBehaviour
 				temptShape.DestinationIndex = info.infoIndex;
 				temptShape.linkMapID = info.linkMapID;
 				shape.name = info.name;
+				destinationList.Add(temptShape);
 				shape.GetComponent<DestinationTarget>().Activate(false);
 			}
 			else if (shape.GetComponent<Waypoint>() != null)
@@ -192,11 +199,13 @@ public class AddShapeWaypoint : MonoBehaviour
 		{
 			Destroy(obj);
 		}
+		destinationList.Clear();
 		NodeObjList.Clear();
 		shapeObjList.Clear();
 		shapeInfoList.Clear();
 		shapesLoaded = false;
 		nodeLoaded = false;
+		loadAllShape = false;
 	}
 
 
@@ -280,5 +289,30 @@ public class AddShapeWaypoint : MonoBehaviour
 			}
 		}
 		nodeLoaded = true;
+	}
+
+	public void ActivateAllDestination()
+	{
+		mapManager.selectDesPopUp.SetActive(false);
+		if (!loadAllShape)
+		{
+			loadAllShape = true;
+			foreach (var des in destinationList)
+			{
+				//des.transform.localScale = Vector3.zero;
+				des.Activate(true);
+				//des.transform.DOScale(1, 0.25f);
+			}
+		}
+		else if (loadAllShape)
+		{
+			loadAllShape = false;
+			foreach (var des in destinationList)
+			{
+				//des.transform.DOScale(0, 0.25f);
+				des.Activate(false);
+			}
+			
+		}
 	}
 }

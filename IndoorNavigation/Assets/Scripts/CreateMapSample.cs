@@ -19,6 +19,7 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 	[SerializeField] GameObject mSimulatorAddShapeButton;
 	[SerializeField] GameObject mMapListPanel;
 	[SerializeField] GameObject mExitButton;
+	[SerializeField] GameObject mActivateDesButton;
 	[SerializeField] GameObject mListElement;
 	[SerializeField] RectTransform mListContentParent;
 	[SerializeField] ToggleGroup mToggleGroup;
@@ -30,7 +31,7 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 	[SerializeField] TextMeshProUGUI statusText;
 	[SerializeField] GameObject waitPopUp;
 	[SerializeField] GameObject scanPopup;
-	[SerializeField] GameObject selectDesPopUp;
+	public GameObject selectDesPopUp;
 	
 	private bool localizeFirstTime;
 	private InputManager inputManager;
@@ -418,6 +419,7 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 				if (completed)
 				{
 					mExitButton.SetActive(true);
+					mActivateDesButton.SetActive(true);
 					DropdownList.gameObject.SetActive(true);
 					LoadDestinationList();
 					initialized = true;
@@ -471,6 +473,7 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 		localizeFirstTime = false;
 		mInitButtonPanel.SetActive(true);
 		mExitButton.SetActive(false);
+		mActivateDesButton.SetActive(false);
 		mMappingButtonPanel.SetActive(false);
 		DropdownList.gameObject.SetActive(false);
 		scanPopup.SetActive(false);

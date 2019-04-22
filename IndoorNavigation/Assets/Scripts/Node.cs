@@ -49,7 +49,7 @@ public class Node : MonoBehaviour {
 			Vector3 difference = NextInList.transform.position - transform.position;
 			float rotationY = Mathf.Atan2(difference.x, difference.z) * Mathf.Rad2Deg;
 			transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y + rotationY, transform.rotation.z);
-			//transform.LookAt(NextInList.transform);
+			
 		}
     }
 

@@ -765,6 +765,12 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1655470145}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1353126784 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5812061776375230773, guid: 26dd121b45b65cd47ab944e50f5c8daf,
+    type: 3}
+  m_PrefabInstance: {fileID: 1655470145}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1381605030
 GameObject:
   m_ObjectHideFlags: 0
@@ -878,6 +884,56 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1381605034}
     m_Modifications:
+    - target: {fileID: 7493580516248730742, guid: 26dd121b45b65cd47ab944e50f5c8daf,
+        type: 3}
+      propertyPath: m_Text
+      value: Show All
+      objectReference: {fileID: 0}
+    - target: {fileID: 1904797581349791659, guid: 26dd121b45b65cd47ab944e50f5c8daf,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 982419079}
+    - target: {fileID: 1904797581349791659, guid: 26dd121b45b65cd47ab944e50f5c8daf,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ActivateAllDestination
+      objectReference: {fileID: 0}
+    - target: {fileID: 5420906352138539312, guid: 26dd121b45b65cd47ab944e50f5c8daf,
+        type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5420906352138539312, guid: 26dd121b45b65cd47ab944e50f5c8daf,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5420906352138539312, guid: 26dd121b45b65cd47ab944e50f5c8daf,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -50
+      objectReference: {fileID: 0}
+    - target: {fileID: 5420906352138539312, guid: 26dd121b45b65cd47ab944e50f5c8daf,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 5420906352138539312, guid: 26dd121b45b65cd47ab944e50f5c8daf,
+        type: 3}
+      propertyPath: m_Pivot.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5812061776375230773, guid: 26dd121b45b65cd47ab944e50f5c8daf,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5812061776375230773, guid: 26dd121b45b65cd47ab944e50f5c8daf,
+        type: 3}
+      propertyPath: m_Name
+      value: ShowAllButton
+      objectReference: {fileID: 0}
     - target: {fileID: 3094176169769625092, guid: 26dd121b45b65cd47ab944e50f5c8daf,
         type: 3}
       propertyPath: m_Name
@@ -1050,6 +1106,11 @@ PrefabInstance:
       propertyPath: starSpawner
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 1747261074666053831, guid: 26dd121b45b65cd47ab944e50f5c8daf,
+        type: 3}
+      propertyPath: mActivateDesButton
+      value: 
+      objectReference: {fileID: 1353126784}
     - target: {fileID: 1525189970965569091, guid: 26dd121b45b65cd47ab944e50f5c8daf,
         type: 3}
       propertyPath: navController
@@ -1445,7 +1506,7 @@ PrefabInstance:
     - target: {fileID: 2974099654782042865, guid: 26dd121b45b65cd47ab944e50f5c8daf,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -1220805
+      value: -1233006.5
       objectReference: {fileID: 0}
     - target: {fileID: 2974099653912223233, guid: 26dd121b45b65cd47ab944e50f5c8daf,
         type: 3}
@@ -1525,7 +1586,7 @@ PrefabInstance:
     - target: {fileID: 2673944782400869142, guid: 26dd121b45b65cd47ab944e50f5c8daf,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -1259002.9
+      value: -1271204.4
       objectReference: {fileID: 0}
     - target: {fileID: 2673944781593956326, guid: 26dd121b45b65cd47ab944e50f5c8daf,
         type: 3}
@@ -4041,6 +4102,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_isInputParsingRequired
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3094176170271014234, guid: 26dd121b45b65cd47ab944e50f5c8daf,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 26dd121b45b65cd47ab944e50f5c8daf, type: 3}

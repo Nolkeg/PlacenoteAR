@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class DestinationTarget : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class DestinationTarget : MonoBehaviour
 	public string linkMapID;
 	[SerializeField] MapNameFromID loadMapPopUp;
 	CreateMapSample mapManager;
+	
 	private void Start()
 	{
 		loadMapPopUp = FindObjectOfType<MapNameFromID>();
@@ -34,6 +36,16 @@ public class DestinationTarget : MonoBehaviour
 	public void Activate(bool active)
 	{
 		destinationMesh.SetActive(active);
+		if(active)
+		{
+			destinationMesh.transform.localScale = Vector3.zero;
+			destinationMesh.transform.DOScale(1, 0.25f);
+		}
+		else
+		{
+			destinationMesh.transform.localScale = new Vector3(1, 1, 1);
+			destinationMesh.transform.DOScale(0, 0.25f);
+		}
 	}
 
 	private void OnTriggerEnter(Collider other)
