@@ -26,7 +26,7 @@ public class LoadMapList : MonoBehaviour
 		{
 			TMP_Dropdown.OptionData nullData = new TMP_Dropdown.OptionData();
 			nullData.text = "none";
-			dropdownList.options.Add(nullData);
+			dropdownList.options.Add(nullData); // add null choice to dropdown
 
 			foreach (LibPlacenote.MapInfo mapInfoItem in mapList)
 			{
@@ -34,7 +34,7 @@ public class LoadMapList : MonoBehaviour
 				{
 					TMP_Dropdown.OptionData data = new TMP_Dropdown.OptionData();
 					data.text = mapInfoItem.metadata.name;
-					dropdownList.options.Add(data);
+					dropdownList.options.Add(data); //add other map to choices to dropdown
 				}
 			}
 		});
@@ -54,11 +54,17 @@ public class LoadMapList : MonoBehaviour
 					if(mapInfoItem.metadata.name == dropdownList.options[index].text)
 					{
 						linkID = mapInfoItem.placeId;
+						break;
+					}
+					else
+					{
+						linkID = null;
 					}
 					
 				}
 			}
 		});
+
 
 	}
 	

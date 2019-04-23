@@ -1508,7 +1508,7 @@ PrefabInstance:
     - target: {fileID: 2974099654782042865, guid: 26dd121b45b65cd47ab944e50f5c8daf,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -1288972.2
+      value: -1302145.2
       objectReference: {fileID: 0}
     - target: {fileID: 2974099653912223233, guid: 26dd121b45b65cd47ab944e50f5c8daf,
         type: 3}
@@ -1588,7 +1588,7 @@ PrefabInstance:
     - target: {fileID: 2673944782400869142, guid: 26dd121b45b65cd47ab944e50f5c8daf,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -1327170.1
+      value: -1340343.1
       objectReference: {fileID: 0}
     - target: {fileID: 2673944781593956326, guid: 26dd121b45b65cd47ab944e50f5c8daf,
         type: 3}
@@ -2291,6 +2291,11 @@ PrefabInstance:
       objectReference: {fileID: 59858357}
     - target: {fileID: 6926171909195604469, guid: 26dd121b45b65cd47ab944e50f5c8daf,
         type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6926171909195604469, guid: 26dd121b45b65cd47ab944e50f5c8daf,
+        type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 982419079}
@@ -2298,6 +2303,31 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: OnAddTriggerClicked
+      objectReference: {fileID: 0}
+    - target: {fileID: 6926171909195604469, guid: 26dd121b45b65cd47ab944e50f5c8daf,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6926171909195604469, guid: 26dd121b45b65cd47ab944e50f5c8daf,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6926171909195604469, guid: 26dd121b45b65cd47ab944e50f5c8daf,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 59858357}
+    - target: {fileID: 6926171909195604469, guid: 26dd121b45b65cd47ab944e50f5c8daf,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: RefreshDropDownMap
+      objectReference: {fileID: 0}
+    - target: {fileID: 6926171909195604469, guid: 26dd121b45b65cd47ab944e50f5c8daf,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 1153128452577898151, guid: 26dd121b45b65cd47ab944e50f5c8daf,
         type: 3}

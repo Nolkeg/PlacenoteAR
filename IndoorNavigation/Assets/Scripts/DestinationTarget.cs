@@ -38,7 +38,7 @@ public class DestinationTarget : MonoBehaviour
 		if(active)
 		{
 			StopAllCoroutines();
-			destinationMesh.SetActive(active);
+			destinationMesh.SetActive(true);
 			destinationMesh.transform.localScale = Vector3.zero;
 			destinationMesh.transform.DOScale(1, 0.25f);
 		}
@@ -55,6 +55,7 @@ public class DestinationTarget : MonoBehaviour
 		yield return new WaitForSeconds(0.25f);
 		destinationMesh.SetActive(false);
 	}
+	
 
 	private void OnTriggerEnter(Collider other)
 	{

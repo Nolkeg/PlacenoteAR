@@ -37,6 +37,7 @@ public class Node : MonoBehaviour {
 		child = transform.GetChild(0);
 		targetScale = child.localScale;
 	}
+
 	//call after next in list is set
 	public void Activate(bool active) {
 		if (child.gameObject.activeInHierarchy)

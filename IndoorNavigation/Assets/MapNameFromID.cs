@@ -29,7 +29,11 @@ public class MapNameFromID : MonoBehaviour
 				{
 					mapNameUI.text = mapInfoItem.metadata.name;
 					triggerMapInfo = mapInfoItem;
+					break;
 				}
+
+				triggerMapInfo = null;
+				mapNameUI.text = "Error";
 				
 			}
 		});
@@ -43,6 +47,11 @@ public class MapNameFromID : MonoBehaviour
 
 	public void CloseAndLoadNewMap()
 	{
+		if(triggerMapInfo==null)
+		{
+			return;
+		}
+
 		mapManager.OnExitClick();
 		transform.DOScale(0, 0.25f);
 		StartCoroutine(delayLoadMap());

@@ -372,7 +372,6 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 		yield return new WaitUntil(() => shapeManager.nodeLoaded == true);
 		if(destination != null)
 		{
-
 			navController.InitializeNavigation();
 		}
 		shapeManager.nodeLoaded = false;
@@ -585,8 +584,8 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 			data.text = name;
 			DropdownList.options.Add(data);
 		}
-
-		DropdownList.RefreshShownValue();
+		DropdownList.value = 0;
+		DropdownList.RefreshShownValue(); // autoselect first value 0 ;
 
 		if(destination == null)
 		{

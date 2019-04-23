@@ -224,7 +224,7 @@ public class AddShapeWaypoint : MonoBehaviour
 				temptShape.linkMapID = info.linkMapID;
 				shape.name = info.name;
 				destinationList.Add(temptShape);
-				shape.GetComponent<DestinationTarget>().Activate(false);
+				temptShape.destinationMesh.SetActive(false);
 			}
 			else if (shape.GetComponent<Waypoint>() != null)
 			{
@@ -311,16 +311,17 @@ public class AddShapeWaypoint : MonoBehaviour
 					obj.GetComponent<DestinationTarget>().Activate(false);
 				}
 			}
-				nodeLoaded = true;
+			nodeLoaded = true;
 			return;
 		}
+
 		foreach(var obj in shapeObjList)
 		{
-			if(obj.GetComponent<DestinationTarget>() != null ) //if is destination deactivate it
+			/*if(obj.GetComponent<DestinationTarget>() != null ) //if is destination deactivate it
 			{
 				obj.GetComponent<DestinationTarget>().Activate(false);
-			}
-			else if(obj.GetComponent<Star>()!=null) // if star, skip
+			}*/
+			if(obj.GetComponent<Star>()!=null || obj.GetComponent<DestinationTarget>() != null) // if star, skip
 			{
 				continue;
 			}
