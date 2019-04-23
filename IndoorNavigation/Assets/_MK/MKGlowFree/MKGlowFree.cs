@@ -3,7 +3,7 @@
 //					                                //
 // Created by Michael Kremmel                       //
 // www.michaelkremmel.de | www.michaelkremmel.store //
-// Copyright © 2017 All rights reserved.            //
+// Copyright 2017 All rights reserved.            //
 //////////////////////////////////////////////////////
 
 using System.Collections;

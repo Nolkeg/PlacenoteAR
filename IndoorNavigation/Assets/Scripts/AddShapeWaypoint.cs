@@ -295,7 +295,7 @@ public class AddShapeWaypoint : MonoBehaviour
 
 	public void CreateNode()
 	{
-		if (NodeObjList.Count !=0)
+		if (NodeObjList.Count != 0)
 		{
 			Debug.Log("already create nodes");
 			//set active node
@@ -316,11 +316,15 @@ public class AddShapeWaypoint : MonoBehaviour
 		}
 		foreach(var obj in shapeObjList)
 		{
-			if(obj.GetComponent<DestinationTarget>() != null)
+			if(obj.GetComponent<DestinationTarget>() != null ) //if is destination deactivate it
 			{
 				obj.GetComponent<DestinationTarget>().Activate(false);
 			}
-			else
+			else if(obj.GetComponent<Star>()!=null) // if star, skip
+			{
+				continue;
+			}
+			else 
 			{
 				obj.SetActive(false); //set all other shape except destination to invisibility
 			}

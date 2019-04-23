@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using UnityEngine.EventSystems;
 
 public class InfoManager : MonoBehaviour
 {
@@ -42,8 +43,7 @@ public class InfoManager : MonoBehaviour
 		{
 			if (Input.GetTouch(i).phase == TouchPhase.Began)
 			{
-
-				// Construct a ray from the current touch coordinates
+					// Construct a ray from the current touch coordinates
 				Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(i).position);
 
 				if (Physics.Raycast(ray, out hit))
@@ -83,12 +83,12 @@ public class InfoManager : MonoBehaviour
 	{
 		if(currentInfo == null)
 		{
-			closeUI.DOScale(0, 0.05f);
+			closeUI.DOScale(0, 0f);
 		}
 		else if(currentInfo != null)
 		{
 			currentInfo.gameObject.transform.DOScale(0, 0.25f);
-			closeUI.DOScale(0, 0.05f);
+			closeUI.DOScale(0, 0);
 			currentInfo = null;
 		}
 		

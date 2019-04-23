@@ -491,7 +491,6 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 		scanPopup.SetActive(false);
 		selectDesPopUp.SetActive(false);
 		waitPopUp.SetActive(false);
-		infoManager.Close();
 		destination = null;
 		destinationList.Clear();
 		DropdownList.value = 0;
@@ -499,6 +498,7 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 		DropdownList.RefreshShownValue();
 		shapeManager.ClearShapes();
 		navController.ReSetParameter();
+		infoManager.Close();
 		StopAllCoroutines();
 		StartCoroutine(UIcheck());
 	}
