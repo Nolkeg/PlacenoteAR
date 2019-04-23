@@ -388,6 +388,7 @@ public class AddShapeWaypoint : MonoBehaviour
 
 				Vector3 hitPosition = PNUtility.MatrixOps.GetPosition(placenoteTransform.Value);
 				Quaternion hitRotation = PNUtility.MatrixOps.GetRotation(placenoteTransform.Value);
+				
 
 				// add star
 				AddShape(hitPosition, hitRotation,3, "Star" );
