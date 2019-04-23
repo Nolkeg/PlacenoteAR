@@ -42,7 +42,7 @@ public class AddShapeWaypoint : MonoBehaviour
 	// All shape management functions (add shapes, save shapes to metadata etc.
 	//-------------------------------------------------
 
-	public void AddShape(Vector3 shapePosition, Quaternion shapeRotation, int shapeType, string name)
+	public void AddShape(Vector3 shapePosition, Quaternion shapeRotation, int shapeType, string Shapename)
 	{
 
 		ShapeInfo shapeInfo = new ShapeInfo();
@@ -54,7 +54,7 @@ public class AddShapeWaypoint : MonoBehaviour
 		shapeInfo.qz = shapeRotation.z;
 		shapeInfo.qw = shapeRotation.w;
 		shapeInfo.shapeType = shapeType.GetHashCode();
-		shapeInfo.name = name;
+		shapeInfo.name = Shapename;
 		shapeInfo.infoIndex = inputmanager.index;
 		shapeInfo.linkMapID = inputmanager.LinkID;
 		shapeInfoList.Add(shapeInfo);
@@ -200,33 +200,31 @@ public class AddShapeWaypoint : MonoBehaviour
 		shape.transform.position = position; // transform the created shape to the metadata position
 		shape.transform.rotation = new Quaternion(info.qx, info.qy, info.qz, info.qw);
 		shape.transform.localScale = new Vector3(.3f, .3f, .3f);
-
-		if(CreateMapSample.mapStatus == CreateMapSample.Status.Mapping)
+		var _temptShape = shape.GetComponent<DestinationTarget>();
+		if(_temptShape != null)
 		{
-			if (shape.GetComponent<DestinationTarget>() != null)
+			_temptShape.DestinationName = info.name;
+			_temptShape.DestinationIndex = info.infoIndex;
+			_temptShape.linkMapID = info.linkMapID;
+			_temptShape.name = info.name;
+			destinationList.Add(_temptShape);
+		}
+		
+		if (mapManager.IsMapping) // if mapping see every thing
+		{
+			if(_temptShape!= null)
 			{
-				var temptShape = shape.GetComponent<DestinationTarget>();
-				temptShape.DestinationName = info.name;
-				temptShape.DestinationIndex = info.infoIndex;
-				temptShape.linkMapID = info.linkMapID;
-				shape.name = info.name;
-				destinationList.Add(temptShape);
-				temptShape.Activate(true);
+				_temptShape.Activate(true);
 			}
 		}
-		else if(CreateMapSample.mapStatus == CreateMapSample.Status.Running)
+		else if(mapManager.IsInitialized) //if running map everything to false
 		{
-			if (shape.GetComponent<DestinationTarget>() != null)
+			if (_temptShape != null)
 			{
-				var temptShape = shape.GetComponent<DestinationTarget>();
-				temptShape.DestinationName = info.name;
-				temptShape.DestinationIndex = info.infoIndex;
-				temptShape.linkMapID = info.linkMapID;
-				shape.name = info.name;
-				destinationList.Add(temptShape);
-				temptShape.destinationMesh.SetActive(false);
+				_temptShape.Activate(false);
 			}
-			else if (shape.GetComponent<Waypoint>() != null)
+
+			if(shape.GetComponent<Waypoint>() != null)
 			{
 				shape.GetComponent<Waypoint>().Activate(false);
 			}
@@ -333,7 +331,7 @@ public class AddShapeWaypoint : MonoBehaviour
 
 		foreach(var shapeinfo in shapeInfoList)
 		{
-			if(shapeinfo.name == null) //doesn't have name = normal waypoint. skip if have name
+			if(shapeinfo.shapeType == 0) //doesn't have name = normal waypoint. skip if have name
 			{
 				GameObject shape = ShapeFromInfo(shapeinfo, true); //create the node arrow at the position of waypoint
 				NodeObjList.Add(shape); // store in list so it is easy to clear later
@@ -391,7 +389,7 @@ public class AddShapeWaypoint : MonoBehaviour
 				
 
 				// add star
-				AddShape(hitPosition, hitRotation,3, "Star" );
+				AddShape(hitPosition, hitRotation,3, "Star");
 
 
 				return true;

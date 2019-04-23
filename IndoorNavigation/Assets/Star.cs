@@ -4,9 +4,11 @@ using UnityEngine;
 using DG.Tweening;
 public class Star : MonoBehaviour
 {
+	NavController cam;
 	private void Start()
 	{
 		transform.localScale = Vector3.zero;
+		cam = FindObjectOfType<NavController>();
 	}
 
 	public void Activate(bool active)
@@ -20,6 +22,12 @@ public class Star : MonoBehaviour
 			transform.DOScale(0, 0.25f);
 		}
 	}
+
+	private void Update()
+	{
+		transform.LookAt(cam.transform);
+	}
+
 
 	private void OnTriggerEnter(Collider other)
 	{

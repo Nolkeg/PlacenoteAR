@@ -72,6 +72,7 @@ public class InputManager : MonoBehaviour
 		DestinationName = null;
 		index = 0;
 		DestinationNamePopUp.text = null;
+		MapNamePopUp.text = null;
 		InfoIndex.text = null;
 		DropdownLink.linkID = null;
 		LinkID = null;

@@ -13,6 +13,7 @@ using TMPro;
 [RequireComponent(typeof(InputManager))]
 public class CreateMapSample : MonoBehaviour, PlacenoteListener
 {
+	[SerializeField] GameObject mExtendedPanel;
 	[SerializeField] GameObject mMapSelectedPanel;
 	[SerializeField] GameObject mInitButtonPanel;
 	[SerializeField] GameObject mMappingButtonPanel;
@@ -245,7 +246,6 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 		});
 	}
 
-
 	public void OnNewMapClicked()
 	{
 		ConfigureSession();
@@ -339,9 +339,10 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 				mCurrMapDetails = metadata;
 			},
 			(completed, faulted, percentage) => {
-				if (completed)
+			if (completed)
 				{
 					statusText.text = "Upload Complete:" + mCurrMapDetails.name;
+					OnExitClick();
 				}
 				else if (faulted)
 				{
@@ -475,15 +476,88 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 		);
 	}
 
+	public void OnExtendedMapClicked()
+	{
+		ConfigureSession();
+
+		if (!LibPlacenote.Instance.Initialized())
+		{
+			Debug.Log("SDK not yet initialized");
+			return;
+		}
+
+		statusText.text = "Loading Map: " + mSelectedMapName;
+
+		mMapSelectedPanel.SetActive(false);
+		mMapListPanel.SetActive(false);
+		mInitButtonPanel.SetActive(false);
+		mMappingButtonPanel.SetActive(false);
+		waitPopUp.SetActive(true);
+
+		LibPlacenote.Instance.LoadMap(mSelectedMapId,
+			(completed, faulted, percentage) => {
+				if (completed)
+				{
+					mExitButton.SetActive(true);
+					mActivateDesButton.SetActive(true);
+					mExtendedPanel.SetActive(true);
+					DropdownList.gameObject.SetActive(true);
+					LoadDestinationList();
+					initialized = false;
+					mapping = true;
+					LibPlacenote.Instance.StartSession(true);
+
+					if (mReportDebug)
+					{
+						LibPlacenote.Instance.StartRecordDataset(
+							(datasetCompleted, datasetFaulted, datasetPercentage) => {
+
+								if (datasetCompleted)
+								{
+									statusText.text = "Dataset Upload Complete";
+								}
+								else if (datasetFaulted)
+								{
+									statusText.text = "Dataset Upload Faulted";
+								}
+								else
+								{
+									statusText.text = "Dataset Upload: " + datasetPercentage.ToString("F2") + "/1.0";
+								}
+							});
+						Debug.Log("Started Debug Report");
+					}
+					Vector3 posOffSet = Vector3.left * 1f + Vector3.down * 2.5f + navController.transform.forward * 5;
+					Vector3 signPos = navController.transform.position + posOffSet;
+
+					statusText.text = "Loaded Map: " + mSelectedMapName;
+					waitPopUp.SetActive(false);
+					scanPopup.SetActive(true);
+				}
+				else if (faulted)
+				{
+					statusText.text = "Failed to load ID: " + mSelectedMapId;
+				}
+				else
+				{
+					statusText.text = "Map Download: " + percentage.ToString("F2") + "/1.0";
+
+				}
+			}
+		);
+	}
+
 	public void OnExitClick()
 	{
 		LibPlacenote.Instance.StopSession();
 		FeaturesVisualizer.clearPointcloud();
 		initialized = false;
+		haveMapName = false;
 		mapping = false;
 		localizeFirstTime = false;
 		mInitButtonPanel.SetActive(true);
 		mExitButton.SetActive(false);
+		mExtendedPanel.SetActive(false);
 		mActivateDesButton.SetActive(false);
 		mMappingButtonPanel.SetActive(false);
 		DropdownList.gameObject.SetActive(false);
@@ -501,6 +575,7 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 		StopAllCoroutines();
 		StartCoroutine(UIcheck());
 	}
+
 	IEnumerator UIcheck()
 	{
 		yield return new WaitForSeconds(1);
