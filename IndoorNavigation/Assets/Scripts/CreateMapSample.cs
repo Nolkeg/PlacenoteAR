@@ -282,6 +282,7 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 		}
 	}
 
+
 	IEnumerator SaveMap()
 	{
 		bool useLocation = Input.location.status == LocationServiceStatus.Running;
@@ -356,6 +357,40 @@ public class CreateMapSample : MonoBehaviour, PlacenoteListener
 		);
 
 	}
+
+
+	public void OnSaveExtendedMap()
+	{
+		var mapId = mSelectedMapId;
+		mInitButtonPanel.SetActive(true);
+		mMappingButtonPanel.SetActive(false);
+		mExitButton.SetActive(false);
+
+		LibPlacenote.MapMetadataSettable metadata = new LibPlacenote.MapMetadataSettable();
+
+		metadata.name = mSelectedMapName; // set name here
+
+		statusText.text = "Saved Map Name: " + metadata.name;
+
+		JObject userdata = new JObject();
+		metadata.userdata = userdata;
+
+		JObject shapeList = shapeManager.Shapes2JSON();
+		userdata.ClearItems();
+		userdata["shapeList"] = shapeList;
+		LibPlacenote.Instance.SetMetadata(mapId, metadata, (success) => {
+			if (success)
+			{
+				Debug.Log("Meta data succesfully saved");
+				OnExitClick();
+			}
+			else
+			{
+				Debug.Log("Meta data failed to save");
+			}
+		});
+	}
+	
 
 	public void OnSaveMapClicked()
 	{
